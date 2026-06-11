@@ -45,18 +45,22 @@ vr-boost-agency/
 │       ├── layout.tsx
 │       ├── dashboard/page.tsx      # Dashboard
 │       ├── projets/
-│       │   ├── page.tsx            # Virtual visits grid
-│       │   ├── nouveau/page.tsx    # New visit form
-│       │   └── [id]/page.tsx       # Visit detail + Hub & Avatar
-│       ├── hub/page.tsx            # Hub & Avatar meetings
-│       └── catalogue/page.tsx      # Furniture catalogue
+│       │   ├── page.tsx            # Virtual visits table
+│       │   ├── nouveau/page.tsx    # New visit form (3 steps + style picker)
+│       │   └── [id]/page.tsx       # Visit detail — 3D tour + Hub & Avatar
+│       ├── hub/page.tsx            # Hub & Avatar (avatar → camera → room)
+│       ├── catalogue/page.tsx      # Furniture catalogue
+│       ├── staging/page.tsx        # Staging editor
+│       ├── schedule/page.tsx       # Meeting schedule
+│       └── team/page.tsx           # Team management
 ├── components/
 │   ├── layout/
 │   │   ├── PlatformeShell.tsx      # Outer shell — header + sidebar + main
 │   │   ├── Header.tsx              # Top bar — logo, mail, notifications, user
 │   │   └── Sidebar.tsx             # Nav sidebar — desktop inline / mobile drawer
 │   └── ui/
-│       └── BadgeStatut.tsx         # Status pill badge
+│       ├── BadgeStatut.tsx         # Status pill badge
+│       └── ManagePlanModal.tsx     # Subscription plans modal
 └── lib/
     ├── types.ts                    # TypeScript types + status label/color maps
     └── data/donnees.json           # Seed data — projects & meetings
@@ -66,17 +70,18 @@ vr-boost-agency/
 
 ## Routes
 
-| Route | Page |
-|---|---|
-| `/` | Landing page — product overview |
-| `/dashboard` | Dashboard — stats + latest visits |
-| `/projets` | Virtual visits grid |
-| `/projets/nouveau` | New visit form |
-| `/projets/[id]` | Visit detail + 3D view + Hub & Avatar |
-| `/hub` | Hub & Avatar meetings |
-| `/catalogue` | Furniture catalogue (placeholder) |
-| `/staging` | Staging editor (placeholder) |
-| `/team` | Team management (placeholder) |
+| Route | Page | Brief mapping |
+|---|---|---|
+| `/` | Landing page — product overview | **Page 1** |
+| `/dashboard` | Dashboard — stats + latest visits | — |
+| `/projets` | Virtual visits table (search, status, assignees) | — |
+| `/projets/nouveau` | New visit form — 3 steps + staging-style picker | **Page 2** |
+| `/projets/[id]` | Visit detail — embedded 3D tour, selected furniture, Share + Join Hub & Avatar | **Page 3** |
+| `/hub` | Hub & Avatar — avatar picker → camera setup → virtual room | — |
+| `/catalogue` | Furniture catalogue — category grid | — |
+| `/staging` | Staging editor — room canvas + furniture panel | — |
+| `/schedule` | Meeting schedule — tabs + availability modal | — |
+| `/team` | Team management — roles + invite modal | — |
 
 ---
 
@@ -201,9 +206,12 @@ All support an optional leading icon — just place a lucide icon as a child.
 | Dashboard | `/dashboard` | LayoutGrid | — |
 | Virtual visits | `/projets` | Video | — |
 | Furniture Catalog | `/catalogue` | Armchair | — |
-| Staging | `/staging` | Wrench | — |
-| Hub & Avatar | `/hub` | UserRound | 3 |
+| Staging | `/staging` | Wand2 | — |
+| Hub & Avatar | `/hub` | UserRound | — |
+| Schedule | `/schedule` | CalendarDays | 3 |
 | Team | `/team` | Users | — |
+
+A "Manage your plan" button at the bottom of the sidebar opens the subscription modal (`ManagePlanModal`).
 
 Active item: `bg-gray-800 text-white` (dark pill).  
 Below `lg`: collapses into a slide-in drawer with a hamburger toggle in the header.
@@ -255,24 +263,27 @@ Below `lg`: collapses into a slide-in drawer with a hamburger toggle in the head
 
 | Feature | Status |
 |---|---|
+| Landing page | Done |
 | Dashboard — stats + latest visits | Done |
-| Virtual visits grid | Done |
-| Visit detail page | Shell — 3D iframe placeholder |
-| Hub & Avatar meetings | Shell — tabs visual only |
-| Furniture catalogue | Placeholder |
-| New visit form | Placeholder |
-| Staging editor | Placeholder |
-| Team management | Placeholder |
-| Search & filters | Visual only |
-| Authentication | Not implemented |
-| Backend / persistence | Not implemented |
+| Virtual visits table | Done |
+| New visit form (3 steps + style picker) | Done |
+| Visit detail — embedded 3D tour, furniture, Share, Join Hub & Avatar | Done |
+| Hub & Avatar flow | Done |
+| Furniture catalogue | Done |
+| Staging editor | Done |
+| Schedule + availability modal | Done |
+| Team management + invite modal | Done |
+| Subscription plans modal | Done |
+| Search & filters | Partial — visit search is live; some filters visual only |
+| Authentication | Not implemented (out of scope) |
+| Backend / persistence | Not implemented (static JSON) |
 
 ---
 
 ## Known Limitations
 
-- All data is static (`donnees.json`). Nothing persists between sessions.
-- The 3D visit viewer is a placeholder — no real Matterport integration.
-- Search, filter, and tab interactions are visual only (no state).
-- `/staging` and `/team` routes do not have pages yet.
-- Collaborator avatars on the dashboard are hardcoded mock data by project ID.
+- All data is static (`donnees.json`). Nothing persists between sessions — creating a visit, inviting a member, etc. routes back without saving.
+- The 3D viewer embeds a public Matterport demo tour for realism; it is not wired to each project's own scan (no real Matterport integration, per the brief).
+- Some filter and tab interactions are visual only; visit search is functional.
+- "Share project" copies the page URL to the clipboard (no real share backend).
+- Collaborator avatars are mock data attached per project in `donnees.json`.

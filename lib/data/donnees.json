@@ -4,53 +4,71 @@
       "id": "34115",
       "client": "Youssef Alami",
       "typeBien": "Appartement",
-      "adresse": "12 Rue de la Paix, Rabat 10000, Maroc",
-      "pieces": ["Salon", "Chambre", "Cuisine"],
+      "adresse": "12 Rue de la Paix, Rabat 10000, Morocco",
+      "pieces": ["Living Room", "Bedroom", "Kitchen"],
       "surface": 124,
       "style": "Contemporain chic",
-      "statut": "non_commence",
+      "statut": "numerisation",
       "lienMatterport": "https://my.matterport.com/show/?m=demo-alami",
       "image": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80",
-      "creeLe": "2026-05-28"
+      "creeLe": "2026-05-28",
+      "assignes": [
+        { "initiale": "E", "couleur": "bg-pink-500" },
+        { "initiale": "S", "couleur": "bg-purple-500" }
+      ]
     },
     {
       "id": "34116",
-      "client": "Layla El Idrissi",
+      "client": "Ahmed El Idrissi",
       "typeBien": "Appartement",
-      "adresse": "45 Rue des Oliviers, Casablanca 20200, Maroc",
-      "pieces": ["Cuisine"],
+      "adresse": "45 Rue des Oliviers, Casablanca 20200, Morocco",
+      "pieces": ["Living Room", "Bedroom", "Kitchen"],
       "surface": 96,
       "style": "Scandinave",
       "statut": "en_attente",
       "lienMatterport": "https://my.matterport.com/show/?m=demo-idrissi",
       "image": "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=800&q=80",
-      "creeLe": "2026-06-01"
+      "creeLe": "2026-06-01",
+      "assignes": [
+        { "initiale": "E", "couleur": "bg-pink-500" },
+        { "initiale": "D", "couleur": "bg-gray-500" },
+        { "initiale": "S", "couleur": "bg-purple-500" }
+      ]
     },
     {
       "id": "34117",
-      "client": "Ahmed Benali",
+      "client": "Fatima Benjelloun",
       "typeBien": "Villa",
-      "adresse": "87 Avenue Hassan II, Marrakech 40000, Maroc",
-      "pieces": ["Salon"],
+      "adresse": "12 Rue de la Paix, Rabat 10000, Morocco",
+      "pieces": ["Living Room", "Bedroom", "Kitchen"],
       "surface": 310,
       "style": "Minimaliste",
-      "statut": "termine",
-      "lienMatterport": "https://my.matterport.com/show/?m=demo-benali",
+      "statut": "non_commence",
+      "lienMatterport": "https://my.matterport.com/show/?m=demo-benjelloun",
       "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
-      "creeLe": "2026-06-03"
+      "creeLe": "2026-06-03",
+      "assignes": [
+        { "initiale": "D", "couleur": "bg-gray-500" },
+        { "initiale": "O", "couleur": "bg-green-500" }
+      ]
     },
     {
       "id": "34118",
-      "client": "Fatima Benjelloun",
-      "typeBien": "Villa",
-      "adresse": "Route de Bouskoura Km 9, Casablanca, Maroc",
-      "pieces": ["Chambre", "Cuisine"],
+      "client": "Hicham Amrani",
+      "typeBien": "Appartement",
+      "adresse": "12 Rue de la Paix, Rabat 10000, Morocco",
+      "pieces": ["Living Room", "Bedroom", "Kitchen"],
       "surface": 280,
       "style": "Industriel",
-      "statut": "numerisation",
-      "lienMatterport": "https://my.matterport.com/show/?m=demo-benjelloun",
+      "statut": "termine",
+      "lienMatterport": "https://my.matterport.com/show/?m=demo-amrani",
       "image": "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&q=80",
-      "creeLe": "2026-06-05"
+      "creeLe": "2026-06-05",
+      "assignes": [
+        { "initiale": "E", "couleur": "bg-pink-500" },
+        { "initiale": "S", "couleur": "bg-purple-500" },
+        { "initiale": "O", "couleur": "bg-green-500" }
+      ]
     }
   ],
   "reunions": [
@@ -66,35 +84,193 @@
         "initiale": "Y",
         "couleur": "bg-green-500"
       },
-      "statut": "a_venir"
+      "statut": "a_venir",
+      "image": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=400&q=80",
+      "typeBien": "Apartment",
+      "adresse": "12 Rue de la Paix, Rabat 10000, Morocco",
+      "pieces": ["Living Room", "Bedroom", "Kitchen"]
     },
     {
       "id": "r-002",
-      "projetId": "34118",
+      "projetId": "34117",
       "date": "2026-06-11",
       "heureDebut": "15:00",
       "heureFin": "15:30",
       "invite": {
-        "nom": "Fatima Benjelloun",
-        "email": "f.benjelloun@example.com",
-        "initiale": "F",
+        "nom": "Emily Johnson",
+        "email": "emily.johnson@example.com",
+        "initiale": "E",
         "couleur": "bg-cyan-500"
       },
-      "statut": "a_venir"
+      "statut": "a_venir",
+      "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&q=80",
+      "typeBien": "Villa",
+      "adresse": "123 Maple Street, Springfield, IL, 62704, USA",
+      "pieces": ["Bedroom", "Kitchen"]
     },
     {
       "id": "r-003",
-      "projetId": "34117",
+      "projetId": "34116",
       "date": "2026-06-12",
       "heureDebut": "16:00",
       "heureFin": "16:30",
       "invite": {
-        "nom": "Ahmed Benali",
+        "nom": "Ahmed El Idrissi",
         "email": "ahmed9990@example.com",
         "initiale": "A",
         "couleur": "bg-red-500"
       },
-      "statut": "a_venir"
+      "statut": "a_venir",
+      "image": "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400&q=80",
+      "typeBien": "Apartment",
+      "adresse": "8 Rue de la Paix, Paris, 75002, France",
+      "pieces": ["Living Room"]
+    }
+  ],
+  "equipe": [
+    {
+      "id": "t-001",
+      "nom": "Abdelali Hraich",
+      "email": "Abduux.ta@gmail.com",
+      "role": "Admin",
+      "initiale": "A",
+      "couleur": "bg-gray-700",
+      "rejointLe": "2023-05-12"
+    },
+    {
+      "id": "t-002",
+      "nom": "Emily Johnson",
+      "email": "emily.johnson@example.com",
+      "role": "Designer",
+      "initiale": "E",
+      "couleur": "bg-pink-500",
+      "rejointLe": "2022-11-28"
+    },
+    {
+      "id": "t-003",
+      "nom": "Sophia Martinez",
+      "email": "sophia.martinez@example.com",
+      "role": "Sales",
+      "initiale": "S",
+      "couleur": "bg-purple-500",
+      "rejointLe": "2024-03-17"
+    },
+    {
+      "id": "t-004",
+      "nom": "David Kim",
+      "email": "Abduux.ta@gmail.com",
+      "role": "Support",
+      "initiale": "D",
+      "couleur": "bg-gray-500",
+      "rejointLe": "2021-09-05"
+    },
+    {
+      "id": "t-005",
+      "nom": "Olivia Brown",
+      "email": "olivia.brown@example.com",
+      "role": "Sales",
+      "initiale": "O",
+      "couleur": "bg-green-500",
+      "rejointLe": "2025-07-22"
+    }
+  ],
+  "categories": [
+    {
+      "id": "c-001",
+      "nom": "Sofa",
+      "items": 45,
+      "image": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80"
+    },
+    {
+      "id": "c-002",
+      "nom": "Lamps",
+      "items": 125,
+      "image": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=80"
+    },
+    {
+      "id": "c-003",
+      "nom": "Chairs",
+      "items": 5,
+      "image": "https://images.unsplash.com/photo-1503602642458-232111445657?w=400&q=80"
+    },
+    {
+      "id": "c-004",
+      "nom": "Sofa",
+      "items": 45,
+      "image": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80"
+    },
+    {
+      "id": "c-005",
+      "nom": "Vase",
+      "items": 25,
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"
+    },
+    {
+      "id": "c-006",
+      "nom": "Chairs",
+      "items": 5,
+      "image": "https://images.unsplash.com/photo-1503602642458-232111445657?w=400&q=80"
+    },
+    {
+      "id": "c-007",
+      "nom": "Vase",
+      "items": 25,
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"
+    },
+    {
+      "id": "c-008",
+      "nom": "Sofa",
+      "items": 45,
+      "image": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80"
+    },
+    {
+      "id": "c-009",
+      "nom": "Lamps",
+      "items": 125,
+      "image": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=80"
+    },
+    {
+      "id": "c-010",
+      "nom": "Sofa",
+      "items": 45,
+      "image": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80"
+    }
+  ],
+  "articles": [
+    {
+      "id": "a-001",
+      "nom": "Eames Chair",
+      "categorieId": "c-003",
+      "couleurs": ["#222222"],
+      "image": "https://images.unsplash.com/photo-1503602642458-232111445657?w=300&q=80"
+    },
+    {
+      "id": "a-002",
+      "nom": "Mustard Armchair",
+      "categorieId": "c-003",
+      "couleurs": ["#E5A910"],
+      "image": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=300&q=80"
+    },
+    {
+      "id": "a-003",
+      "nom": "Lounge Chair",
+      "categorieId": "c-003",
+      "couleurs": ["#8B7355", "#555555", "#E0E0E0"],
+      "image": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&q=80"
+    },
+    {
+      "id": "a-004",
+      "nom": "Nordic Chair",
+      "categorieId": "c-003",
+      "couleurs": ["#B3B3B3"],
+      "image": "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=300&q=80"
+    },
+    {
+      "id": "a-005",
+      "nom": "Velvet Sofa",
+      "categorieId": "c-003",
+      "couleurs": ["#4A7C59", "#B3B3B3"],
+      "image": "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=300&q=80"
     }
   ]
 }

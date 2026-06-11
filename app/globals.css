@@ -4,8 +4,8 @@
 
 @layer base {
   body {
-    @apply bg-scene min-h-screen font-sans text-encre antialiased;
-    background-attachment: fixed;
+    @apply min-h-screen font-sans text-encre antialiased;
+    background-color: #DEDEDE;
   }
 
   ::selection {
@@ -14,9 +14,9 @@
 }
 
 @layer components {
-  /* Grand conteneur translucide (panneau central, sidebar, header) */
+  /* Grand conteneur (panneau central, sidebar, header) */
   .panneau {
-    @apply rounded-panneau bg-panneau shadow-panneau backdrop-blur-md;
+    @apply rounded-panneau bg-white shadow-carte;
   }
 
   /* Carte blanche standard */

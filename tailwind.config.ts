@@ -50,9 +50,11 @@ const config: Config = {
         panneau: "0 8px 40px rgba(22, 24, 29, 0.08)",
       },
       backgroundImage: {
-        // Dégradé de fond du prototype
-        scene:
-          "linear-gradient(120deg, #A9C2F2 0%, #C0C3F0 45%, #D9CDEA 80%, #EFD8DC 100%)",
+        scene: "none",
+      },
+      backgroundColor: {
+        app: "#DEDEDE",
+        content: "#EBEBEB",
       },
     },
   },
