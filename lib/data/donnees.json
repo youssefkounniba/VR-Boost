@@ -1,0 +1,100 @@
+{
+  "projets": [
+    {
+      "id": "34115",
+      "client": "Youssef Alami",
+      "typeBien": "Appartement",
+      "adresse": "12 Rue de la Paix, Rabat 10000, Maroc",
+      "pieces": ["Salon", "Chambre", "Cuisine"],
+      "surface": 124,
+      "style": "Contemporain chic",
+      "statut": "non_commence",
+      "lienMatterport": "https://my.matterport.com/show/?m=demo-alami",
+      "image": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80",
+      "creeLe": "2026-05-28"
+    },
+    {
+      "id": "34116",
+      "client": "Layla El Idrissi",
+      "typeBien": "Appartement",
+      "adresse": "45 Rue des Oliviers, Casablanca 20200, Maroc",
+      "pieces": ["Cuisine"],
+      "surface": 96,
+      "style": "Scandinave",
+      "statut": "en_attente",
+      "lienMatterport": "https://my.matterport.com/show/?m=demo-idrissi",
+      "image": "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=800&q=80",
+      "creeLe": "2026-06-01"
+    },
+    {
+      "id": "34117",
+      "client": "Ahmed Benali",
+      "typeBien": "Villa",
+      "adresse": "87 Avenue Hassan II, Marrakech 40000, Maroc",
+      "pieces": ["Salon"],
+      "surface": 310,
+      "style": "Minimaliste",
+      "statut": "termine",
+      "lienMatterport": "https://my.matterport.com/show/?m=demo-benali",
+      "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
+      "creeLe": "2026-06-03"
+    },
+    {
+      "id": "34118",
+      "client": "Fatima Benjelloun",
+      "typeBien": "Villa",
+      "adresse": "Route de Bouskoura Km 9, Casablanca, Maroc",
+      "pieces": ["Chambre", "Cuisine"],
+      "surface": 280,
+      "style": "Industriel",
+      "statut": "numerisation",
+      "lienMatterport": "https://my.matterport.com/show/?m=demo-benjelloun",
+      "image": "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&q=80",
+      "creeLe": "2026-06-05"
+    }
+  ],
+  "reunions": [
+    {
+      "id": "r-001",
+      "projetId": "34115",
+      "date": "2026-06-11",
+      "heureDebut": "14:00",
+      "heureFin": "14:30",
+      "invite": {
+        "nom": "Youssef Alami",
+        "email": "youssef.mail@example.com",
+        "initiale": "Y",
+        "couleur": "bg-green-500"
+      },
+      "statut": "a_venir"
+    },
+    {
+      "id": "r-002",
+      "projetId": "34118",
+      "date": "2026-06-11",
+      "heureDebut": "15:00",
+      "heureFin": "15:30",
+      "invite": {
+        "nom": "Fatima Benjelloun",
+        "email": "f.benjelloun@example.com",
+        "initiale": "F",
+        "couleur": "bg-cyan-500"
+      },
+      "statut": "a_venir"
+    },
+    {
+      "id": "r-003",
+      "projetId": "34117",
+      "date": "2026-06-12",
+      "heureDebut": "16:00",
+      "heureFin": "16:30",
+      "invite": {
+        "nom": "Ahmed Benali",
+        "email": "ahmed9990@example.com",
+        "initiale": "A",
+        "couleur": "bg-red-500"
+      },
+      "statut": "a_venir"
+    }
+  ]
+}

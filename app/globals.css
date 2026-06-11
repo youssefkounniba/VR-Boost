@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-scene min-h-screen font-sans text-encre antialiased;
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    @apply bg-accent/20 text-encre;
+  }
+}
+
+@layer components {
+  /* Grand conteneur translucide (panneau central, sidebar, header) */
+  .panneau {
+    @apply rounded-panneau bg-panneau shadow-panneau backdrop-blur-md;
+  }
+
+  /* Carte blanche standard */
+  .carte {
+    @apply rounded-carte bg-carte shadow-carte;
+  }
+
+  /* Primary — black */
+  .btn-noir {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-action px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400;
+  }
+
+  /* Secondary — blue */
+  .btn-bleu {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:bg-blue-100 disabled:text-blue-300;
+  }
+
+  /* Tertiary — white with border */
+  .btn-blanc {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-encre bg-white px-5 py-2.5 text-sm font-bold text-encre transition-colors hover:bg-champ focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-encre disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400;
+  }
+
+  /* Alternative — borderless light background */
+  .btn-alternative {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-white/70 px-5 py-2.5 text-sm font-bold text-encre transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-encre disabled:cursor-not-allowed disabled:text-gray-400;
+  }
+
+  /* Input — base */
+  .champ-saisie {
+    @apply w-full rounded-xl border border-transparent bg-white px-4 py-2.5 text-sm text-encre placeholder:text-brume focus:border-accent focus:outline-none;
+  }
+
+  /* Input — error state (add alongside champ-saisie) */
+  .champ-error {
+    @apply border-red-500 focus:border-red-500;
+  }
+
+  /* Input — success state (add alongside champ-saisie) */
+  .champ-ok {
+    @apply border-green-500 focus:border-green-500;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
