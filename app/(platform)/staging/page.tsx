@@ -11,30 +11,27 @@ import {
   Play,
   Share2,
   MoreHorizontal,
-  Move,
 } from "lucide-react";
-import donnees from "@/lib/data/donnees.json";
-import type { ArticleMobilier } from "@/lib/types";
+import data from "@/lib/data/data.json";
+import type { FurnitureItem } from "@/lib/types";
 
 const ROOM_BG =
   "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&q=80";
 
-const CATEGORIES = ["All", "Chairs", "Sofa", "Lamps", "Vase", "Tables"];
-
-export default function PageStaging() {
-  const articles = donnees.articles as ArticleMobilier[];
+export default function StagingPage() {
+  const items = data.items as FurnitureItem[];
   const [search, setSearch] = useState("");
-  const [selectedCat, setSelectedCat] = useState("All");
-  const [placed, setPlaced] = useState<ArticleMobilier | null>(articles[0]);
+  const [selectedCat] = useState("All");
+  const [placed, setPlaced] = useState<FurnitureItem | null>(items[0]);
 
-  const filtered = articles.filter(
+  const filtered = items.filter(
     (a) =>
-      (selectedCat === "All" || a.categorieId === "c-003") &&
-      a.nom.toLowerCase().includes(search.toLowerCase())
+      (selectedCat === "All" || a.categoryId === "c-003") &&
+      a.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="flex h-[calc(100vh-140px)] min-h-[500px] flex-col overflow-hidden rounded-2xl bg-encre">
+    <div className="flex h-[calc(100vh-140px)] min-h-[500px] flex-col overflow-hidden rounded-2xl bg-ink">
       {/* Top toolbar */}
       <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
         <button
@@ -82,7 +79,7 @@ export default function PageStaging() {
         </button>
 
         <div className="ml-auto flex items-center gap-2">
-          <button className="btn-bleu text-sm">
+          <button className="btn-blue text-sm">
             <Share2 className="h-4 w-4" />
             Publish
           </button>
@@ -105,7 +102,7 @@ export default function PageStaging() {
         />
 
         {/* Cursor label */}
-        <div className="absolute left-1/2 top-1/4 -translate-x-1/2 rounded bg-encre/80 px-2 py-1 text-xs text-white">
+        <div className="absolute left-1/2 top-1/4 -translate-x-1/2 rounded bg-ink/80 px-2 py-1 text-xs text-white">
           Abdelali Hraich
         </div>
 
@@ -115,7 +112,7 @@ export default function PageStaging() {
             <div className="relative h-48 w-48">
               <Image
                 src={placed.image}
-                alt={placed.nom}
+                alt={placed.name}
                 fill
                 className="object-contain drop-shadow-2xl"
                 sizes="192px"
@@ -132,7 +129,7 @@ export default function PageStaging() {
       </div>
 
       {/* Bottom panel */}
-      <div className="border-t border-white/10 bg-encre/95 px-4 py-3">
+      <div className="border-t border-white/10 bg-ink/95 px-4 py-3">
         <div className="mb-3 flex items-center gap-3">
           <label className="relative flex-1 max-w-xs">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
@@ -150,26 +147,26 @@ export default function PageStaging() {
         </div>
 
         <div className="flex gap-3 overflow-x-auto pb-1">
-          {filtered.map((art) => (
+          {filtered.map((item) => (
             <button
-              key={art.id}
+              key={item.id}
               type="button"
-              onClick={() => setPlaced(art)}
+              onClick={() => setPlaced(item)}
               className={`relative h-28 w-28 shrink-0 overflow-hidden rounded-xl border-2 transition-colors ${
-                placed?.id === art.id
+                placed?.id === item.id
                   ? "border-white"
                   : "border-transparent hover:border-white/40"
               }`}
             >
               <Image
-                src={art.image}
-                alt={art.nom}
+                src={item.image}
+                alt={item.name}
                 fill
                 className="object-cover"
                 sizes="112px"
               />
               <div className="absolute bottom-1 left-1 flex gap-0.5">
-                {art.couleurs.map((c, i) => (
+                {item.colors.map((c, i) => (
                   <span
                     key={i}
                     className="h-3 w-3 rounded-full border border-white/50"

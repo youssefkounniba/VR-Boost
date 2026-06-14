@@ -4,60 +4,143 @@
 
 @layer base {
   body {
-    @apply min-h-screen font-sans text-encre antialiased;
+    @apply min-h-screen font-sans text-ink antialiased;
     background-color: #DEDEDE;
   }
 
   ::selection {
-    @apply bg-accent/20 text-encre;
+    @apply bg-accent/20 text-ink;
   }
 }
 
 @layer components {
-  /* Grand conteneur (panneau central, sidebar, header) */
-  .panneau {
-    @apply rounded-panneau bg-white shadow-carte;
+  /* Large container (central panel, sidebar, header) */
+  .panel {
+    @apply rounded-panel bg-white shadow-card;
   }
 
-  /* Carte blanche standard */
-  .carte {
-    @apply rounded-carte bg-carte shadow-carte;
+  /* Standard white card */
+  .card {
+    @apply rounded-card bg-card shadow-card;
   }
 
   /* Primary — black */
-  .btn-noir {
+  .btn-black {
     @apply inline-flex items-center justify-center gap-2 rounded-xl bg-action px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-action disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400;
   }
 
   /* Secondary — blue */
-  .btn-bleu {
+  .btn-blue {
     @apply inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:bg-blue-100 disabled:text-blue-300;
   }
 
   /* Tertiary — white with border */
-  .btn-blanc {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-encre bg-white px-5 py-2.5 text-sm font-bold text-encre transition-colors hover:bg-champ focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-encre disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400;
+  .btn-white {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-ink bg-white px-5 py-2.5 text-sm font-bold text-ink transition-colors hover:bg-field focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400;
   }
 
   /* Alternative — borderless light background */
   .btn-alternative {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-white/70 px-5 py-2.5 text-sm font-bold text-encre transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-encre disabled:cursor-not-allowed disabled:text-gray-400;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-white/70 px-5 py-2.5 text-sm font-bold text-ink transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-not-allowed disabled:text-gray-400;
   }
 
   /* Input — base */
-  .champ-saisie {
-    @apply w-full rounded-xl border border-transparent bg-white px-4 py-2.5 text-sm text-encre placeholder:text-brume focus:border-accent focus:outline-none;
+  .field {
+    @apply w-full rounded-xl border border-transparent bg-white px-4 py-2.5 text-sm text-ink placeholder:text-faint focus:border-accent focus:outline-none;
   }
 
-  /* Input — error state (add alongside champ-saisie) */
-  .champ-error {
+  /* Input — error state (add alongside .field) */
+  .field-error {
     @apply border-red-500 focus:border-red-500;
   }
 
-  /* Input — success state (add alongside champ-saisie) */
-  .champ-ok {
+  /* Input — success state (add alongside .field) */
+  .field-ok {
     @apply border-green-500 focus:border-green-500;
   }
+}
+
+/* ---- Landing page (premium 3D) ---- */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes floaty-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-22px); }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.7; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+@keyframes mesh-drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(5%, -4%, 0) scale(1.15); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0% { background-position: -150% 0; }
+  100% { background-position: 250% 0; }
+}
+@keyframes sound-bar {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes drop-in {
+  from { opacity: 0; transform: translateY(28px) scale(0.92); }
+  60% { opacity: 1; }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes pin-pop {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+@keyframes bounce-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.animate-rise {
+  opacity: 0;
+  animation: rise-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.text-sheen {
+  background: linear-gradient(100deg, #ffffff 0%, #c3d6ff 38%, #b3a4ff 64%, #ffd2ab 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.btn-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.45) 50%, transparent 65%);
+  background-size: 220% 100%;
+  animation: shimmer 3.2s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

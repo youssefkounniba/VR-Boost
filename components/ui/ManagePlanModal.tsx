@@ -70,17 +70,17 @@ export default function ManagePlanModal({ onClose }: ManagePlanModalProps) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-white/80 text-encre hover:bg-white"
+          className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-white/80 text-ink hover:bg-white"
         >
           <X className="h-4 w-4" />
         </button>
 
         {/* Header */}
         <div className="mb-6 text-center">
-          <h2 className="text-4xl font-extrabold text-encre">
+          <h2 className="text-4xl font-extrabold text-ink">
             Manage your plan
           </h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-ardoise">
+          <p className="mx-auto mt-2 max-w-xl text-sm text-muted">
             Contact Us If you need something more specific, we also offer custom
             quotes based on your project requirements.
           </p>
@@ -94,8 +94,8 @@ export default function ManagePlanModal({ onClose }: ManagePlanModalProps) {
               onClick={() => setBilling("yearly")}
               className={`rounded-full px-6 py-2 text-sm font-semibold transition-colors ${
                 billing === "yearly"
-                  ? "bg-encre text-white"
-                  : "text-ardoise hover:text-encre"
+                  ? "bg-ink text-white"
+                  : "text-muted hover:text-ink"
               }`}
             >
               Yearly
@@ -105,8 +105,8 @@ export default function ManagePlanModal({ onClose }: ManagePlanModalProps) {
               onClick={() => setBilling("monthly")}
               className={`rounded-full px-6 py-2 text-sm font-semibold transition-colors ${
                 billing === "monthly"
-                  ? "bg-encre text-white"
-                  : "text-ardoise hover:text-encre"
+                  ? "bg-ink text-white"
+                  : "text-muted hover:text-ink"
               }`}
             >
               Monthly
@@ -122,19 +122,19 @@ export default function ManagePlanModal({ onClose }: ManagePlanModalProps) {
               className={`flex flex-col rounded-2xl p-6 ${
                 plan.current
                   ? "bg-accent text-white"
-                  : "bg-white text-encre"
+                  : "bg-white text-ink"
               }`}
             >
               <h3
                 className={`text-2xl font-extrabold ${
-                  plan.current ? "text-white" : "text-encre"
+                  plan.current ? "text-white" : "text-ink"
                 }`}
               >
                 {plan.name}
               </h3>
               <p
                 className={`mt-1 text-xs italic ${
-                  plan.current ? "text-white/80" : "text-ardoise"
+                  plan.current ? "text-white/80" : "text-muted"
                 }`}
               >
                 {plan.desc}
@@ -144,14 +144,14 @@ export default function ManagePlanModal({ onClose }: ManagePlanModalProps) {
               <div className="my-5 flex items-start">
                 <span
                   className={`text-5xl font-extrabold leading-none ${
-                    plan.current ? "text-white" : "text-encre"
+                    plan.current ? "text-white" : "text-ink"
                   }`}
                 >
                   {plan.price}
                 </span>
                 <span
                   className={`ml-0.5 mt-1 text-base font-semibold ${
-                    plan.current ? "text-white/80" : "text-ardoise"
+                    plan.current ? "text-white/80" : "text-muted"
                   }`}
                 >
                   $
@@ -182,7 +182,7 @@ export default function ManagePlanModal({ onClose }: ManagePlanModalProps) {
                   <li
                     key={f}
                     className={`flex items-start gap-2 text-xs ${
-                      plan.current ? "text-white/90" : "text-ardoise"
+                      plan.current ? "text-white/90" : "text-muted"
                     }`}
                   >
                     <span className="mt-0.5 shrink-0">•</span>

@@ -3,16 +3,16 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Clock, MapPin, X } from "lucide-react";
-import donnees from "@/lib/data/donnees.json";
-import type { Reunion } from "@/lib/types";
+import data from "@/lib/data/data.json";
+import type { Meeting } from "@/lib/types";
 
-type Tab = "a_venir" | "passee" | "en_direct" | "annulee";
+type Tab = "upcoming" | "past" | "live" | "canceled";
 
 const TABS: { key: Tab; label: string }[] = [
-  { key: "a_venir", label: "Upcoming" },
-  { key: "passee", label: "Past" },
-  { key: "en_direct", label: "Live" },
-  { key: "annulee", label: "Canceled" },
+  { key: "upcoming", label: "Upcoming" },
+  { key: "past", label: "Past" },
+  { key: "live", label: "Live" },
+  { key: "canceled", label: "Canceled" },
 ];
 
 const MONTHS = [
@@ -36,11 +36,11 @@ function formatDateLabel(isoDate: string) {
   return `${MONTHS[d.getMonth()]} ${d.getDate()},${d.getFullYear()}`;
 }
 
-function groupByDate(reunions: Reunion[]) {
-  const groups: Record<string, Reunion[]> = {};
-  for (const r of reunions) {
-    if (!groups[r.date]) groups[r.date] = [];
-    groups[r.date].push(r);
+function groupByDate(meetings: Meeting[]) {
+  const groups: Record<string, Meeting[]> = {};
+  for (const m of meetings) {
+    if (!groups[m.date]) groups[m.date] = [];
+    groups[m.date].push(m);
   }
   return groups;
 }
@@ -62,13 +62,13 @@ const defaultAvailability: AvailabilityDay[] = [
   { day: "Sunday", enabled: false, from: "09:00 AM", to: "05:00 PM" },
 ];
 
-export default function PageSchedule() {
-  const [tab, setTab] = useState<Tab>("a_venir");
+export default function SchedulePage() {
+  const [tab, setTab] = useState<Tab>("upcoming");
   const [showAvailability, setShowAvailability] = useState(false);
   const [availability, setAvailability] = useState(defaultAvailability);
 
-  const reunions = donnees.reunions as Reunion[];
-  const filtered = reunions.filter((r) => r.statut === tab);
+  const meetings = data.meetings as Meeting[];
+  const filtered = meetings.filter((m) => m.status === tab);
   const groups = groupByDate(filtered);
   const sortedDates = Object.keys(groups).sort();
 
@@ -82,15 +82,15 @@ export default function PageSchedule() {
     <div>
       {/* Tabs + Availability */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex gap-1 rounded-xl bg-white p-1 text-sm font-semibold shadow-carte">
+        <div className="flex gap-1 rounded-xl bg-white p-1 text-sm font-semibold shadow-card">
           {TABS.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
               className={`rounded-lg px-4 py-1.5 transition-colors ${
                 tab === t.key
-                  ? "bg-champ text-encre shadow-sm"
-                  : "text-ardoise hover:text-encre"
+                  ? "bg-field text-ink shadow-sm"
+                  : "text-muted hover:text-ink"
               }`}
             >
               {t.label}
@@ -100,7 +100,7 @@ export default function PageSchedule() {
         <button
           type="button"
           onClick={() => setShowAvailability(true)}
-          className="btn-noir gap-2"
+          className="btn-black gap-2"
         >
           <Clock className="h-4 w-4" />
           Availability
@@ -110,22 +110,22 @@ export default function PageSchedule() {
       {/* Meeting groups */}
       <div className="mt-5 space-y-6">
         {sortedDates.length === 0 && (
-          <div className="carte p-10 text-center text-sm text-brume">
+          <div className="card p-10 text-center text-sm text-faint">
             No meetings in this category.
           </div>
         )}
 
         {sortedDates.map((date) => (
           <div key={date}>
-            <p className="mb-3 text-sm font-bold text-ardoise">
+            <p className="mb-3 text-sm font-bold text-muted">
               {formatDateLabel(date).split("  ")[0]}{" "}
               <span className="font-normal">
                 {formatDateLabel(date).split("  ")[1]}
               </span>
             </p>
             <div className="space-y-3">
-              {groups[date].map((r) => (
-                <MeetingCard key={r.id} reunion={r} />
+              {groups[date].map((m) => (
+                <MeetingCard key={m.id} meeting={m} />
               ))}
             </div>
           </div>
@@ -135,8 +135,8 @@ export default function PageSchedule() {
       {/* Availability modal */}
       {showAvailability && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-lg rounded-2xl bg-white shadow-panneau">
-            <div className="flex items-center gap-3 rounded-t-2xl bg-encre px-6 py-4">
+          <div className="w-full max-w-lg rounded-2xl bg-white shadow-panel">
+            <div className="flex items-center gap-3 rounded-t-2xl bg-ink px-6 py-4">
               <Clock className="h-5 w-5 text-white" />
               <h2 className="text-base font-bold text-white">
                 Adjust working hours
@@ -156,7 +156,7 @@ export default function PageSchedule() {
                     type="button"
                     onClick={() => toggleDay(i)}
                     className={`relative h-6 w-11 rounded-full transition-colors ${
-                      item.enabled ? "bg-encre" : "bg-gray-200"
+                      item.enabled ? "bg-ink" : "bg-gray-200"
                     }`}
                   >
                     <span
@@ -165,7 +165,7 @@ export default function PageSchedule() {
                       }`}
                     />
                   </button>
-                  <span className="w-24 text-sm font-semibold text-encre">
+                  <span className="w-24 text-sm font-semibold text-ink">
                     {item.day}
                   </span>
                   {item.enabled ? (
@@ -173,13 +173,13 @@ export default function PageSchedule() {
                       <span className="flex-1 rounded-xl border border-gray-200 px-3 py-1.5 text-center text-sm">
                         from {item.from}
                       </span>
-                      <span className="text-ardoise">-</span>
+                      <span className="text-muted">-</span>
                       <span className="flex-1 rounded-xl border border-gray-200 px-3 py-1.5 text-center text-sm">
                         to {item.to}
                       </span>
                     </div>
                   ) : (
-                    <span className="flex-1 rounded-xl bg-champ px-3 py-1.5 text-center text-sm text-brume">
+                    <span className="flex-1 rounded-xl bg-field px-3 py-1.5 text-center text-sm text-faint">
                       Not available
                     </span>
                   )}
@@ -190,7 +190,7 @@ export default function PageSchedule() {
               <button
                 type="button"
                 onClick={() => setShowAvailability(false)}
-                className="btn-noir w-full"
+                className="btn-black w-full"
               >
                 Save changes
               </button>
@@ -202,27 +202,27 @@ export default function PageSchedule() {
   );
 }
 
-function MeetingCard({ reunion }: { reunion: Reunion }) {
-  const d = new Date(reunion.date);
+function MeetingCard({ meeting }: { meeting: Meeting }) {
+  const d = new Date(meeting.date);
   const month = MONTHS[d.getMonth()];
   const day = d.getDate();
 
   return (
-    <div className="carte flex flex-wrap items-center gap-4 p-4">
+    <div className="card flex flex-wrap items-center gap-4 p-4">
       {/* Date */}
       <div className="flex w-16 shrink-0 flex-col items-center">
-        <p className="text-xs font-semibold uppercase text-ardoise">{month}</p>
-        <p className="text-3xl font-extrabold leading-none text-encre">{day}</p>
-        <p className="mt-1 text-xs text-ardoise">
-          {reunion.heureDebut} - {reunion.heureFin}
+        <p className="text-xs font-semibold uppercase text-muted">{month}</p>
+        <p className="text-3xl font-extrabold leading-none text-ink">{day}</p>
+        <p className="mt-1 text-xs text-muted">
+          {meeting.startTime} - {meeting.endTime}
         </p>
       </div>
 
       {/* Thumbnail */}
-      {reunion.image && (
+      {meeting.image && (
         <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
           <Image
-            src={reunion.image}
+            src={meeting.image}
             alt=""
             fill
             className="object-cover"
@@ -230,7 +230,7 @@ function MeetingCard({ reunion }: { reunion: Reunion }) {
           />
           <span className="absolute inset-0 flex items-center justify-center">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/80">
-              <svg className="h-3 w-3 text-encre" viewBox="0 0 16 16" fill="currentColor">
+              <svg className="h-3 w-3 text-ink" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M6 3l7 5-7 5V3z" />
               </svg>
             </span>
@@ -240,34 +240,34 @@ function MeetingCard({ reunion }: { reunion: Reunion }) {
 
       {/* Property info */}
       <div className="min-w-0 flex-1">
-        <p className="font-bold text-encre">
-          {reunion.invite.nom}, {reunion.typeBien}
+        <p className="font-bold text-ink">
+          {meeting.guest.name}, {meeting.propertyType}
         </p>
-        {reunion.adresse && (
-          <p className="mt-0.5 flex items-center gap-1 text-xs text-ardoise">
+        {meeting.address && (
+          <p className="mt-0.5 flex items-center gap-1 text-xs text-muted">
             <MapPin className="h-3 w-3 shrink-0" />
-            {reunion.adresse}
+            {meeting.address}
           </p>
         )}
-        {reunion.pieces && (
-          <p className="mt-0.5 text-xs text-brume">
-            {reunion.pieces.join(", ")}
+        {meeting.rooms && (
+          <p className="mt-0.5 text-xs text-faint">
+            {meeting.rooms.join(", ")}
           </p>
         )}
       </div>
 
-      {/* Invite */}
+      {/* Guest */}
       <div className="hidden shrink-0 items-center gap-3 sm:flex">
         <span
-          className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white ${reunion.invite.couleur}`}
+          className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white ${meeting.guest.color}`}
         >
-          {reunion.invite.initiale}
+          {meeting.guest.initial}
         </span>
         <div>
-          <p className="text-sm font-semibold text-encre">
-            {reunion.invite.nom}
+          <p className="text-sm font-semibold text-ink">
+            {meeting.guest.name}
           </p>
-          <p className="text-xs text-ardoise">{reunion.invite.email}</p>
+          <p className="text-xs text-muted">{meeting.guest.email}</p>
         </div>
       </div>
 
@@ -281,11 +281,11 @@ function MeetingCard({ reunion }: { reunion: Reunion }) {
         </button>
         <button
           type="button"
-          className="rounded-xl border border-gray-200 px-4 py-2 text-xs font-semibold text-encre transition-colors hover:bg-champ"
+          className="rounded-xl border border-gray-200 px-4 py-2 text-xs font-semibold text-ink transition-colors hover:bg-field"
         >
           Reschedule
         </button>
-        <button type="button" className="btn-noir text-xs">
+        <button type="button" className="btn-black text-xs">
           Join meeting
         </button>
       </div>

@@ -1,8 +1,8 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Tokens extraits du prototype Figma (thème clair, dégradé bleu-lavande,
- * panneaux translucides, boutons noirs en pilule, accent bleu).
+ * Design tokens from the Figma prototype (light theme, frosted panels,
+ * black pill buttons, blue accent).
  */
 const config: Config = {
   content: [
@@ -12,42 +12,73 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Texte
-        encre: "#16181D", // titres / texte principal
-        ardoise: "#5C6470", // texte secondaire
-        brume: "#9AA1AC", // labels discrets
+        // Text
+        ink: "#16181D", // headings / primary text
+        muted: "#5C6470", // secondary text
+        faint: "#9AA1AC", // subtle labels
 
         // Surfaces
-        panneau: "rgba(255,255,255,0.45)", // grands conteneurs translucides
-        carte: "#FFFFFF", // cartes
-        champ: "#F3F5FA", // inputs / lignes de tableau
+        panel: "rgba(255,255,255,0.45)", // large translucent containers
+        card: "#FFFFFF", // cards
+        field: "#F3F5FA", // inputs / table rows
 
         // Actions
-        action: "#111111", // bouton principal noir (pilule)
+        action: "#111111", // primary black button (pill)
         accent: {
-          DEFAULT: "#2D7FF9", // bleu (Rejoindre, liens)
-          doux: "#E3EEFE",
+          DEFAULT: "#2D7FF9", // blue (join, links)
+          soft: "#E3EEFE",
         },
 
-        // Statuts (badges du prototype)
-        statut: {
-          attente: "#6B7280", // Non commencé
-          encours: "#F59E0B", // En attente
-          scan: "#3B82F6", // Numérisation
-          termine: "#22C55E", // Terminé
-          annule: "#EF4444",
+        // Status (badges)
+        status: {
+          pending: "#6B7280", // Not Started
+          progress: "#F59E0B", // Pending
+          scan: "#3B82F6", // Scanning
+          done: "#22C55E", // Completed
+          canceled: "#EF4444",
+        },
+
+        // Landing page — brand palette (vrboostagency.com).
+        // Scoped under `landing` so it never collides with the platform tokens.
+        landing: {
+          // Light theme (white site)
+          paper: "#FFFFFF", // page background
+          mist: "#F4F6FB", // alternating section background
+          cloud: "#EEF2FB", // soft tinted panels
+          ink: "#0F172A", // headings, primary text
+          body: "#475569", // body text
+          line: "#E2E8F0", // card borders, dividers
+          lineHov: "#CBD5E1", // hover borders
+          // Accents
+          ctaBlue: "#4361EE", // primary buttons, links
+          ctaHover: "#3A56D4", // button hover
+          violet: "#7C3AED", // accent highlights
+          teal: "#14B8A6", // angular accent
+          lime: "#84CC16", // angular accent
+          // Dark bands (CTA bands + footer)
+          abyss: "#070815",
+          deepNavy: "#0C0C20",
+          surface: "#13132D",
+          blanc: "#FFFFFF",
+          clair: "#E2E8F0",
+          muted: "#94A3B8",
+          dim: "#64748B",
+          borderDef: "#1E293B",
+          success: "#22C55E",
+          danger: "#EF4444",
         },
       },
       fontFamily: {
-        sans: ["var(--font-lato)", "system-ui", "sans-serif"],
+        display: ["var(--font-lato)", "sans-serif"], // Lato — headings, display
+        sans: ["var(--font-roboto)", "sans-serif"], // Roboto — body, labels, buttons
       },
       borderRadius: {
-        panneau: "1.5rem", // 24px — grands conteneurs
-        carte: "1rem", // 16px — cartes
+        panel: "1.5rem", // 24px — large containers
+        card: "1rem", // 16px — cards
       },
       boxShadow: {
-        carte: "0 2px 12px rgba(22, 24, 29, 0.06)",
-        panneau: "0 8px 40px rgba(22, 24, 29, 0.08)",
+        card: "0 2px 12px rgba(22, 24, 29, 0.06)",
+        panel: "0 8px 40px rgba(22, 24, 29, 0.08)",
       },
       backgroundImage: {
         scene: "none",

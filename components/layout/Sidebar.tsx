@@ -17,13 +17,13 @@ import {
 import ManagePlanModal from "@/components/ui/ManagePlanModal";
 
 const navigation = [
-  { nom: "Dashboard", href: "/dashboard", icone: LayoutGrid },
-  { nom: "Virtual visits", href: "/projets", icone: Video },
-  { nom: "Furniture Catalog", href: "/catalogue", icone: Armchair },
-  { nom: "Staging", href: "/staging", icone: Wand2 },
-  { nom: "Hub & Avatar", href: "/hub", icone: UserRound },
-  { nom: "Schedule", href: "/schedule", icone: CalendarDays, badge: 3 },
-  { nom: "Team", href: "/team", icone: Users },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutGrid },
+  { name: "Virtual visits", href: "/projects", icon: Video },
+  { name: "Furniture Catalog", href: "/catalog", icon: Armchair },
+  { name: "Staging", href: "/staging", icon: Wand2 },
+  { name: "Hub & Avatar", href: "/hub", icon: UserRound },
+  { name: "Schedule", href: "/schedule", icon: CalendarDays, badge: 3 },
+  { name: "Team", href: "/team", icon: Users },
 ];
 
 interface SidebarProps {
@@ -41,7 +41,7 @@ function NavLinks({
   return (
     <nav className="space-y-0.5">
       {navigation.map((item) => {
-        const actif =
+        const active =
           pathname === item.href || pathname.startsWith(item.href + "/");
         return (
           <Link
@@ -49,13 +49,13 @@ function NavLinks({
             href={item.href}
             onClick={onClose}
             className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-colors ${
-              actif
+              active
                 ? "bg-gray-800 text-white"
-                : "text-ardoise hover:bg-champ hover:text-encre"
+                : "text-muted hover:bg-field hover:text-ink"
             }`}
           >
-            <item.icone className="h-[17px] w-[17px]" strokeWidth={1.8} />
-            <span className="flex-1">{item.nom}</span>
+            <item.icon className="h-[17px] w-[17px]" strokeWidth={1.8} />
+            <span className="flex-1">{item.name}</span>
             {item.badge ? (
               <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[11px] font-bold text-white">
                 {item.badge}
@@ -73,8 +73,8 @@ function CtaCard({ onClose }: { onClose?: () => void }) {
 
   return (
     <>
-      <div className="carte mt-auto p-4 text-center">
-        <p className="text-xs font-medium leading-relaxed text-ardoise">
+      <div className="card mt-auto p-4 text-center">
+        <p className="text-xs font-medium leading-relaxed text-muted">
           Upgrade to our Pro Plan and unlock your full potential today!
         </p>
         <button
@@ -83,7 +83,7 @@ function CtaCard({ onClose }: { onClose?: () => void }) {
             onClose?.();
             setShowPlan(true);
           }}
-          className="btn-noir mt-3 w-full text-xs"
+          className="btn-black mt-3 w-full text-xs"
         >
           <Zap className="h-3.5 w-3.5" strokeWidth={2.5} />
           Manage your plan
@@ -101,7 +101,7 @@ export default function Sidebar({ open = false, onClose }: SidebarProps) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="panneau hidden w-56 shrink-0 flex-col p-3 lg:flex">
+      <aside className="panel hidden w-56 shrink-0 flex-col p-3 lg:flex">
         <NavLinks pathname={pathname} />
         <CtaCard />
       </aside>
@@ -117,7 +117,7 @@ export default function Sidebar({ open = false, onClose }: SidebarProps) {
 
       {/* Mobile drawer */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-white p-3 shadow-panneau transition-transform duration-300 lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-white p-3 shadow-panel transition-transform duration-300 lg:hidden ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -129,7 +129,7 @@ export default function Sidebar({ open = false, onClose }: SidebarProps) {
             type="button"
             aria-label="Close menu"
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-xl bg-champ text-encre transition-colors hover:bg-gray-200"
+            className="flex h-9 w-9 items-center justify-center rounded-xl bg-field text-ink transition-colors hover:bg-gray-200"
           >
             <X className="h-4 w-4" strokeWidth={2} />
           </button>

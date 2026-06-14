@@ -1,91 +1,91 @@
-export type StatutVisite =
-  | "non_commence"
-  | "en_attente"
-  | "numerisation"
-  | "en_cours"
-  | "termine";
+export type VisitStatus =
+  | "not_started"
+  | "pending"
+  | "scanning"
+  | "in_progress"
+  | "completed";
 
-export type StyleAmenagement =
-  | "Contemporain chic"
-  | "Scandinave"
-  | "Minimaliste"
-  | "Industriel"
-  | "Bohème";
+export type StagingStyle =
+  | "Contemporary Chic"
+  | "Scandinavian"
+  | "Minimalist"
+  | "Industrial"
+  | "Bohemian";
 
-export interface Projet {
+export interface Project {
   id: string;
   client: string;
-  typeBien: "Appartement" | "Maison" | "Villa" | "Plateau de bureaux";
-  adresse: string;
-  pieces: string[];
+  propertyType: "Apartment" | "House" | "Villa" | "Office";
+  address: string;
+  rooms: string[];
   surface: number;
-  style: StyleAmenagement;
-  statut: StatutVisite;
-  lienMatterport: string;
+  style: StagingStyle;
+  status: VisitStatus;
+  matterportLink: string;
   image: string;
-  creeLe: string;
-  assignes?: { initiale: string; couleur: string }[];
+  createdAt: string;
+  assignees?: { initial: string; color: string }[];
 }
 
-export interface Reunion {
+export interface Meeting {
   id: string;
-  projetId: string;
+  projectId: string;
   date: string;
-  heureDebut: string;
-  heureFin: string;
-  invite: { nom: string; email: string; initiale: string; couleur: string };
-  statut: "a_venir" | "passee" | "en_direct" | "annulee";
+  startTime: string;
+  endTime: string;
+  guest: { name: string; email: string; initial: string; color: string };
+  status: "upcoming" | "past" | "live" | "canceled";
   image?: string;
-  typeBien?: string;
-  adresse?: string;
-  pieces?: string[];
+  propertyType?: string;
+  address?: string;
+  rooms?: string[];
 }
 
-export interface MembreEquipe {
+export interface TeamMember {
   id: string;
-  nom: string;
+  name: string;
   email: string;
   role: "Admin" | "Designer" | "Sales" | "Support";
-  initiale: string;
-  couleur: string;
-  rejointLe: string;
+  initial: string;
+  color: string;
+  joinedAt: string;
 }
 
-export interface CategorieMobilier {
+export interface FurnitureCategory {
   id: string;
-  nom: string;
+  name: string;
   items: number;
   image: string;
 }
 
-export interface ArticleMobilier {
+export interface FurnitureItem {
   id: string;
-  nom: string;
-  categorieId: string;
-  couleurs: string[];
+  name: string;
+  categoryId: string;
+  colors: string[];
   image: string;
 }
 
-export const LIBELLES_STATUT: Record<StatutVisite, string> = {
-  non_commence: "Not Started",
-  en_attente: "Pending",
-  numerisation: "Scanning",
-  en_cours: "In Progress",
-  termine: "Completed",
+export const STATUS_LABELS: Record<VisitStatus, string> = {
+  not_started: "Not Started",
+  pending: "Pending",
+  scanning: "Scanning",
+  in_progress: "In Progress",
+  completed: "Completed",
 };
 
-export const COULEURS_STATUT: Record<StatutVisite, string> = {
-  non_commence: "bg-gray-100 text-gray-500",
-  en_attente: "bg-amber-50 text-amber-600",
-  numerisation: "bg-blue-50 text-blue-600",
-  en_cours: "bg-purple-50 text-purple-600",
-  termine: "bg-green-50 text-green-600",
+export const STATUS_COLORS: Record<VisitStatus, string> = {
+  not_started: "bg-gray-100 text-gray-500",
+  pending: "bg-amber-50 text-amber-600",
+  scanning: "bg-blue-50 text-blue-600",
+  in_progress: "bg-purple-50 text-purple-600",
+  completed: "bg-green-50 text-green-600",
 };
 
-export const POINT_STATUT: Record<StatutVisite, string> = {
-  non_commence: "bg-gray-400",
-  en_attente: "bg-amber-500",
-  numerisation: "bg-blue-500",
-  en_cours: "bg-purple-500",
-  termine: "bg-green-500",
+export const STATUS_DOT: Record<VisitStatus, string> = {
+  not_started: "bg-gray-400",
+  pending: "bg-amber-500",
+  scanning: "bg-blue-500",
+  in_progress: "bg-purple-500",
+  completed: "bg-green-500",
 };
