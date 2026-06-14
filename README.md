@@ -12,7 +12,7 @@ A mini-MVP for the rochebobois Paris virtual home-staging platform. Allows agent
 | Language | TypeScript 5 |
 | Styling | Tailwind CSS 3 — custom design tokens |
 | Icons | lucide-react |
-| Data | Static JSON (`lib/data/data.json`) — no backend |
+| Data | Static JSON seed (`lib/data/data.json`); projects mirrored to `localStorage` — no backend |
 | Font | Lato (Google Fonts) — weights 300 / 400 / 700 / 900 |
 
 ---
@@ -253,13 +253,15 @@ Other entities: `TeamMember`, `FurnitureCategory`, `FurnitureItem` (see `lib/typ
 | Subscription plans modal | Done |
 | Search & filters | Partial — visit search is live; some filters visual only |
 | Authentication | Not implemented (out of scope) |
-| Backend / persistence | Not implemented (static JSON) |
+| Project persistence | Created / edited / deleted visits persist in `localStorage` |
+| Backend | Not implemented (static JSON seed, client-side store) |
 
 ---
 
 ## Known Limitations
 
-- All data is static (`data.json`). Nothing persists between sessions — creating a visit, inviting a member, etc. routes back without saving.
+- Data is seeded from static JSON (`data.json`). **Projects** are the only entity with real persistence: creating, editing, or deleting a visit is mirrored to `localStorage` (`vrboost.projects.v1`) via the `useProjects` store, so it survives a reload. There is no real backend, so this is per-browser only and clearing storage resets to the seed.
+- Other actions (inviting a team member, scheduling a meeting, etc.) are still mock — they navigate or update local state without persisting.
 - The 3D viewer embeds a public Matterport demo tour for realism; it is not wired to each project's own scan (no real Matterport integration, per the brief).
 - Some filter and tab interactions are visual only; visit search is functional.
 - "Share project" copies the page URL to the clipboard (no real share backend).

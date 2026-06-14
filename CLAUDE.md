@@ -15,7 +15,7 @@ There is no test runner — the project has no tests. Type errors surface via `n
 
 ## Big Picture
 
-A front-end-only MVP for "rochebobois", a virtual home-staging platform for real-estate agents (3D virtual visits, Hub & Avatar meetings, furniture catalog). **There is no backend.** All data is seeded from `lib/data/data.json` and imported statically; nothing persists. Actions like "create visit", "invite member", or "share" are mocked — they navigate or copy a URL but never write data.
+A front-end-only MVP for "rochebobois", a virtual home-staging platform for real-estate agents (3D virtual visits, Hub & Avatar meetings, furniture catalog). **There is no backend.** All data is seeded from `lib/data/data.json`. The one exception to "nothing persists" is **projects**: the `useProjects` store (`lib/store/projects-store.tsx`) mirrors create/edit/delete to `localStorage` (`vrboost.projects.v1`), so visits survive a reload per-browser. Everything else — "invite member", "schedule meeting", "share" — is still mocked: it navigates or copies a URL but never writes data.
 
 - **Next.js 14 App Router**, TypeScript, Tailwind CSS 3, `lucide-react` icons. No state library, no data fetching layer.
 - **Path alias:** `@/*` maps to the repo root (e.g. `@/components/...`, `@/lib/...`).

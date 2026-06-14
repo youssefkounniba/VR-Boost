@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Search,
@@ -10,12 +9,14 @@ import {
   Plus,
   MapPin,
   MoreHorizontal,
-  Edit,
+  Pencil,
+  Archive,
   Trash2,
   X,
 } from "lucide-react";
 import { useProjects } from "@/lib/store/projects-store";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import EditProjectModal from "@/components/ui/EditProjectModal";
 import type { VisitStatus, Project } from "@/lib/types";
 import { STATUS_LABELS, STATUS_COLORS, STATUS_DOT } from "@/lib/types";
 
@@ -35,10 +36,13 @@ const TYPES: Project["propertyType"][] = [
 ];
 
 export default function ProjectsPage() {
-  const router = useRouter();
-  const { projects, deleteProject } = useProjects();
+  const { projects, deleteProject, updateProject } = useProjects();
 
+  const [editProject, setEditProject] = useState<Project | null>(null);
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const [menuPos, setMenuPos] = useState<{ top: number; left: number } | null>(
+    null
+  );
   const [search, setSearch] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState<VisitStatus[]>([]);
@@ -50,10 +54,20 @@ export default function ProjectsPage() {
   // Close popovers on outside click.
   useEffect(() => {
     function onClick(e: MouseEvent) {
-      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+      const target = e.target as HTMLElement;
+      if (filterRef.current && !filterRef.current.contains(target)) {
         setFilterOpen(false);
       }
-      setMenuOpen(null);
+      // Leave the row menu alone when the click is its toggle or inside the
+      // open menu — those are handled by their own onClick. (stopPropagation
+      // can't help here: React's delegated listener shares the document node
+      // with this one, so it would still fire.)
+      if (
+        !target.closest("[data-action-toggle]") &&
+        !target.closest("[data-action-menu]")
+      ) {
+        setMenuOpen(null);
+      }
     }
     document.addEventListener("click", onClick);
     return () => document.removeEventListener("click", onClick);
@@ -62,6 +76,7 @@ export default function ProjectsPage() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return projects.filter((p) => {
+      if (p.archived) return false;
       const matchesSearch =
         !q ||
         p.client.toLowerCase().includes(q) ||
@@ -222,8 +237,9 @@ export default function ProjectsPage() {
 
       {/* Table */}
       <div className="card mt-5 overflow-hidden">
-        <table className="w-full min-w-[640px] text-sm">
-          <thead>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
+            <thead>
             <tr className="border-b border-gray-100">
               <th className="w-10 p-4">
                 <input type="checkbox" className="h-4 w-4 rounded" />
@@ -310,28 +326,59 @@ export default function ProjectsPage() {
                     ))}
                   </div>
                 </td>
-                <td className="relative p-4">
+                <td className="p-4">
                   <button
                     type="button"
+                    data-action-toggle
                     onClick={(e) => {
-                      e.stopPropagation();
-                      setMenuOpen(menuOpen === p.id ? null : p.id);
+                      if (menuOpen === p.id) {
+                        setMenuOpen(null);
+                        return;
+                      }
+                      // Anchor a fixed-position menu to the button so it isn't
+                      // clipped by the table's scroll container.
+                      const r = e.currentTarget.getBoundingClientRect();
+                      const menuH = 96;
+                      const top =
+                        r.bottom + 4 + menuH > window.innerHeight
+                          ? r.top - menuH - 4
+                          : r.bottom + 4;
+                      setMenuPos({ top, left: Math.max(8, r.right - 160) });
+                      setMenuOpen(p.id);
                     }}
                     className="flex h-8 w-8 items-center justify-center rounded-lg text-muted transition-colors hover:bg-field"
                   >
                     <MoreHorizontal className="h-4 w-4" />
                   </button>
-                  {menuOpen === p.id && (
+                  {menuOpen === p.id && menuPos && (
                     <div
-                      onClick={(e) => e.stopPropagation()}
-                      className="absolute right-4 top-full z-20 mt-1 w-40 rounded-xl bg-white py-1 shadow-panel"
+                      data-action-menu
+                      style={{
+                        position: "fixed",
+                        top: menuPos.top,
+                        left: menuPos.left,
+                      }}
+                      className="z-50 w-40 rounded-xl bg-white py-1 shadow-panel"
                     >
                       <button
-                        onClick={() => router.push(`/projects/${p.id}`)}
+                        onClick={() => {
+                          setEditProject(p);
+                          setMenuOpen(null);
+                        }}
                         className="flex w-full items-center gap-2 px-4 py-2 text-sm text-ink hover:bg-field"
                       >
-                        <Edit className="h-3.5 w-3.5" />
-                        View / edit
+                        <Pencil className="h-3.5 w-3.5" />
+                        Edit details
+                      </button>
+                      <button
+                        onClick={() => {
+                          updateProject(p.id, { archived: true });
+                          setMenuOpen(null);
+                        }}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-sm text-ink hover:bg-field"
+                      >
+                        <Archive className="h-3.5 w-3.5" />
+                        Archive
                       </button>
                       <button
                         onClick={() => {
@@ -365,6 +412,7 @@ export default function ProjectsPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Delete confirmation */}
@@ -383,6 +431,15 @@ export default function ProjectsPage() {
         }}
         onCancel={() => setPendingDelete(null)}
       />
+
+      {/* Edit details */}
+      {editProject && (
+        <EditProjectModal
+          project={editProject}
+          open={editProject !== null}
+          onClose={() => setEditProject(null)}
+        />
+      )}
     </div>
   );
 }

@@ -25,6 +25,7 @@ export interface Project {
   image: string;
   createdAt: string;
   assignees?: { initial: string; color: string }[];
+  archived?: boolean;
 }
 
 export interface Meeting {
