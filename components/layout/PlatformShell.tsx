@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import ChatWidget from "@/components/ui/ChatWidget";
 import { ProjectsProvider } from "@/lib/store/projects-store";
 
 export default function PlatformShell({
@@ -26,6 +27,7 @@ export default function PlatformShell({
           </main>
         </div>
       </div>
+      <ChatWidget />
     </ProjectsProvider>
   );
 }

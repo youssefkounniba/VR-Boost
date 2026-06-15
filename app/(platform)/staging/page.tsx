@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Search,
   ChevronDown,
@@ -17,9 +17,31 @@ import {
   Plus,
   MessageCircle,
   Hand,
+  X,
 } from "lucide-react";
 import data from "@/lib/data/data.json";
-import type { FurnitureItem, FurnitureCategory, Project } from "@/lib/types";
+import type {
+  FurnitureItem,
+  FurnitureCategory,
+  Project,
+  VisitStatus,
+} from "@/lib/types";
+import { STATUS_LABELS } from "@/lib/types";
+
+const STATUSES: VisitStatus[] = [
+  "not_started",
+  "pending",
+  "scanning",
+  "in_progress",
+  "completed",
+];
+
+const TYPES: Project["propertyType"][] = [
+  "Apartment",
+  "House",
+  "Villa",
+  "Office",
+];
 
 // Two distinct empty rooms so v1 / v2 read as different scenes.
 const ROOM_V1 =
@@ -53,18 +75,54 @@ export default function StagingPage() {
   const [placed, setPlaced] = useState<FurnitureItem | null>(null);
   const [transform, setTransform] = useState<Transform>(DEFAULT_TRANSFORM);
 
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<VisitStatus[]>([]);
+  const [typeFilter, setTypeFilter] = useState<Project["propertyType"][]>([]);
+  const filterRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+        setFilterOpen(false);
+      }
+    }
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
   const filtered = items.filter(
     (a) =>
       (categoryId === "all" || a.categoryId === categoryId) &&
       a.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const galleryProjects = projects.filter(
-    (p) =>
-      `${p.client} ${p.propertyType} ${p.address}`
-        .toLowerCase()
-        .includes(gallerySearch.toLowerCase())
-  );
+  const activeFilters = statusFilter.length + typeFilter.length;
+
+  function toggleStatus(s: VisitStatus) {
+    setStatusFilter((prev) =>
+      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]
+    );
+  }
+  function toggleType(t: Project["propertyType"]) {
+    setTypeFilter((prev) =>
+      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
+    );
+  }
+  function clearFilters() {
+    setStatusFilter([]);
+    setTypeFilter([]);
+  }
+
+  const galleryProjects = projects.filter((p) => {
+    const matchesSearch = `${p.client} ${p.propertyType} ${p.address}`
+      .toLowerCase()
+      .includes(gallerySearch.toLowerCase());
+    const matchesStatus =
+      statusFilter.length === 0 || statusFilter.includes(p.status);
+    const matchesType =
+      typeFilter.length === 0 || typeFilter.includes(p.propertyType);
+    return matchesSearch && matchesStatus && matchesType;
+  });
 
   function openEditor() {
     if (!placed) setPlaced(items[0]);
@@ -85,11 +143,114 @@ export default function StagingPage() {
               onChange={(e) => setGallerySearch(e.target.value)}
             />
           </label>
-          <button type="button" className="btn-white gap-2">
-            <SlidersHorizontal className="h-4 w-4" />
-            Filter
-          </button>
+
+          <div className="relative" ref={filterRef}>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilterOpen((o) => !o);
+              }}
+              className="btn-white gap-2"
+            >
+              <SlidersHorizontal className="h-4 w-4" />
+              Filter
+              {activeFilters > 0 && (
+                <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-accent px-1.5 text-[11px] font-bold text-white">
+                  {activeFilters}
+                </span>
+              )}
+            </button>
+
+            {filterOpen && (
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="absolute left-0 top-full z-30 mt-2 w-64 max-w-[calc(100vw-2.5rem)] rounded-xl bg-white p-4 shadow-panel sm:left-auto sm:right-0"
+              >
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-bold text-ink">Filters</p>
+                  {activeFilters > 0 && (
+                    <button
+                      type="button"
+                      onClick={clearFilters}
+                      className="text-xs font-semibold text-accent hover:underline"
+                    >
+                      Clear all
+                    </button>
+                  )}
+                </div>
+
+                <p className="mb-2 mt-3 text-xs font-semibold text-muted">
+                  Status
+                </p>
+                <div className="space-y-1.5">
+                  {STATUSES.map((s) => (
+                    <label
+                      key={s}
+                      className="flex cursor-pointer items-center gap-2 text-sm text-ink"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={statusFilter.includes(s)}
+                        onChange={() => toggleStatus(s)}
+                        className="h-4 w-4 rounded accent-accent"
+                      />
+                      {STATUS_LABELS[s]}
+                    </label>
+                  ))}
+                </div>
+
+                <p className="mb-2 mt-4 text-xs font-semibold text-muted">
+                  Property type
+                </p>
+                <div className="space-y-1.5">
+                  {TYPES.map((t) => (
+                    <label
+                      key={t}
+                      className="flex cursor-pointer items-center gap-2 text-sm text-ink"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={typeFilter.includes(t)}
+                        onChange={() => toggleType(t)}
+                        className="h-4 w-4 rounded accent-accent"
+                      />
+                      {t}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* Active filter chips */}
+        {activeFilters > 0 && (
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            {statusFilter.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => toggleStatus(s)}
+                className="inline-flex items-center gap-1 rounded-full bg-field px-3 py-1 text-xs font-semibold text-ink hover:bg-gray-200"
+              >
+                {STATUS_LABELS[s]}
+                <X className="h-3 w-3" />
+              </button>
+            ))}
+            {typeFilter.map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => toggleType(t)}
+                className="inline-flex items-center gap-1 rounded-full bg-field px-3 py-1 text-xs font-semibold text-ink hover:bg-gray-200"
+              >
+                {t}
+                <X className="h-3 w-3" />
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-5">
           {galleryProjects.map((p) => (
@@ -130,7 +291,7 @@ export default function StagingPage() {
 
           {galleryProjects.length === 0 && (
             <div className="col-span-full py-16 text-center text-sm text-muted">
-              No visits match your search.
+              No visits match your search or filters.
             </div>
           )}
         </div>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Bell, ChevronDown, Menu } from "lucide-react";
 import { useState } from "react";
+import AppearanceModal from "@/components/ui/AppearanceModal";
 
 interface HeaderProps {
   onMenuToggle?: () => void;
@@ -11,6 +12,7 @@ interface HeaderProps {
 
 export default function Header({ onMenuToggle }: HeaderProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showAppearance, setShowAppearance] = useState(false);
   const router = useRouter();
 
   return (
@@ -92,6 +94,12 @@ export default function Header({ onMenuToggle }: HeaderProps) {
               {["Statistics", "Appearance", "Settings"].map((item) => (
                 <button
                   key={item}
+                  onClick={() => {
+                    if (item === "Appearance") {
+                      setDropdownOpen(false);
+                      setShowAppearance(true);
+                    }
+                  }}
                   className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-ink hover:bg-field"
                 >
                   {item}
@@ -112,6 +120,10 @@ export default function Header({ onMenuToggle }: HeaderProps) {
           </div>
         )}
       </div>
+
+      {showAppearance && (
+        <AppearanceModal onClose={() => setShowAppearance(false)} />
+      )}
     </header>
   );
 }

@@ -1,6 +1,6 @@
-# rochebobois — Virtual Visits Platform
+# vr boost agency — Virtual Visits Platform
 
-A mini-MVP for the rochebobois Paris virtual home-staging platform. Allows agents to manage 3D virtual visits, schedule Hub & Avatar meetings, and browse the furniture catalog — all from a single dashboard.
+A mini-MVP for the vr boost agency virtual home-staging platform. Allows agents to manage 3D virtual visits, schedule Hub & Avatar meetings, and browse the furniture catalog — all from a single dashboard.
 
 ---
 
@@ -12,8 +12,8 @@ A mini-MVP for the rochebobois Paris virtual home-staging platform. Allows agent
 | Language | TypeScript 5 |
 | Styling | Tailwind CSS 3 — custom design tokens |
 | Icons | lucide-react |
-| Data | Static JSON seed (`lib/data/data.json`); projects mirrored to `localStorage` — no backend |
-| Font | Lato (Google Fonts) — weights 300 / 400 / 700 / 900 |
+| Data | Static JSON seed (`lib/data/data.json`); projects mirrored to `localStorage` via a React context store — no backend |
+| Fonts | Lato (display) + Roboto (body) — Google Fonts |
 
 ---
 
@@ -38,31 +38,36 @@ npm run lint    # ESLint
 ```
 vr-boost-agency/
 ├── app/
-│   ├── layout.tsx                  # Root layout — Lato font, metadata
+│   ├── layout.tsx                  # Root layout — Lato + Roboto fonts, metadata
 │   ├── globals.css                 # Tailwind base + component classes
 │   ├── page.tsx                    # Landing page (/)
 │   └── (platform)/                 # Route group — shared shell (header + sidebar)
 │       ├── layout.tsx
 │       ├── dashboard/page.tsx      # Dashboard
 │       ├── projects/
-│       │   ├── page.tsx            # Virtual visits table
-│       │   ├── new/page.tsx        # New visit form (3 steps + style picker)
-│       │   └── [id]/page.tsx       # Visit detail — 3D tour + Hub & Avatar
+│       │   ├── page.tsx            # Virtual visits table (search + filter + delete)
+│       │   ├── new/page.tsx        # New visit form (3 steps + style picker) → creates a project
+│       │   └── [id]/page.tsx       # Visit detail — 3D tour, Hub & Avatar, edit + delete
 │       ├── hub/page.tsx            # Hub & Avatar (avatar → camera → room)
 │       ├── catalog/page.tsx        # Furniture catalog
-│       ├── staging/page.tsx        # Staging editor
+│       ├── staging/page.tsx        # Staging editor + gallery (search + filter)
 │       ├── schedule/page.tsx       # Meeting schedule
 │       └── team/page.tsx           # Team management
 ├── components/
 │   ├── layout/
-│   │   ├── PlatformShell.tsx       # Outer shell — header + sidebar + main
-│   │   ├── Header.tsx              # Top bar — logo, mail, notifications, user
+│   │   ├── PlatformShell.tsx       # Outer shell — ProjectsProvider + header + sidebar + main + chat
+│   │   ├── Header.tsx              # Top bar — logo, mail, notifications, user, Appearance modal
 │   │   └── Sidebar.tsx             # Nav sidebar — desktop inline / mobile drawer
 │   └── ui/
 │       ├── StatusBadge.tsx         # Status pill badge
-│       └── ManagePlanModal.tsx     # Subscription plans modal
+│       ├── ManagePlanModal.tsx     # Subscription plans modal
+│       ├── EditProjectModal.tsx    # Edit a visit's fields (update)
+│       ├── ConfirmDialog.tsx       # Reusable confirm popup (used for delete)
+│       ├── AppearanceModal.tsx     # Brand logo / colors / font / theme settings
+│       └── ChatWidget.tsx          # Floating bottom-right chat widget
 └── lib/
     ├── types.ts                    # TypeScript types + status label/color maps
+    ├── store/projects-store.tsx    # Client CRUD store (React context + localStorage)
     └── data/data.json              # Seed data — projects, meetings, team, furniture
 ```
 
@@ -74,12 +79,12 @@ vr-boost-agency/
 |---|---|
 | `/` | Landing page — product overview |
 | `/dashboard` | Dashboard — stats + latest visits |
-| `/projects` | Virtual visits table (search, status, assignees) |
-| `/projects/new` | New visit form — 3 steps + staging-style picker |
-| `/projects/[id]` | Visit detail — embedded 3D tour, selected furniture, Share + Join Hub & Avatar |
+| `/projects` | Virtual visits table — search, status/type filter, edit + delete |
+| `/projects/new` | New visit form — 3 steps + staging-style picker; **creates** a project |
+| `/projects/[id]` | Visit detail — embedded 3D tour, selected furniture, Share, **Edit**, **Delete** + Join Hub & Avatar |
 | `/hub` | Hub & Avatar — avatar picker → camera setup → virtual room |
 | `/catalog` | Furniture catalog — category grid |
-| `/staging` | Staging editor — room canvas + furniture panel |
+| `/staging` | Staging editor — gallery (search + filter) + room canvas + furniture panel |
 | `/schedule` | Meeting schedule — tabs + availability modal |
 | `/team` | Team management — roles + invite modal |
 
@@ -236,6 +241,25 @@ Other entities: `TeamMember`, `FurnitureCategory`, `FurnitureItem` (see `lib/typ
 
 ---
 
+## State Management — Projects CRUD
+
+Since there is no backend, projects are managed by a small client-side store:
+
+- **`lib/store/projects-store.tsx`** — a React context (`ProjectsProvider` + `useProjects()` hook) seeded from `data.json` and mirrored to `localStorage` (`vrboost.projects.v1`).
+- `ProjectsProvider` wraps every authenticated page (mounted in `PlatformShell`), so the list, detail, and forms share one source of truth.
+- API: `projects`, `addProject`, `updateProject`, `deleteProject`, `getProject`, plus a `ready` flag (true once hydrated from storage).
+
+| Operation | Where | How |
+|---|---|---|
+| **Create** | `/projects/new` | Wizard maps the form → `addProject(...)`, then redirects to the new visit |
+| **Read** | `/projects`, `/projects/[id]` | Read from the store; list supports search + status/type filter |
+| **Update** | `/projects/[id]` → Edit | `EditProjectModal` patches fields via `updateProject(id, patch)` |
+| **Delete** | list row menu or detail page | `ConfirmDialog` → `deleteProject(id)` (detail page redirects to the list) |
+
+All mutations persist to `localStorage`, so they survive a reload (per-browser).
+
+---
+
 ## Current State
 
 | Feature | Status |
@@ -243,16 +267,19 @@ Other entities: `TeamMember`, `FurnitureCategory`, `FurnitureItem` (see `lib/typ
 | Landing page | Done |
 | Dashboard — stats + latest visits | Done |
 | Virtual visits table | Done |
-| New visit form (3 steps + style picker) | Done |
-| Visit detail — embedded 3D tour, furniture, Share, Join Hub & Avatar | Done |
+| Project CRUD (create / read / update / delete) | Done — via `useProjects` store |
+| New visit form (3 steps + style picker) | Done — creates a project |
+| Visit detail — 3D tour, furniture, Share, Edit, Delete, Join Hub & Avatar | Done |
 | Hub & Avatar flow | Done |
 | Furniture catalog | Done |
-| Staging editor | Done |
+| Staging editor + gallery | Done |
 | Schedule + availability modal | Done |
 | Team management + invite modal | Done |
 | Subscription plans modal | Done |
-| Search & filters | Partial — visit search is live; some filters visual only |
-| Authentication | Not implemented (out of scope) |
+| Appearance settings modal | Done — visual mock (not applied to live theme) |
+| Floating chat widget | Done — mock conversation |
+| Search & filters (projects + staging) | Done — search + status/type filter, mobile-safe |
+| Authentication / payment / AI staging | Not implemented (out of scope) |
 | Project persistence | Created / edited / deleted visits persist in `localStorage` |
 | Backend | Not implemented (static JSON seed, client-side store) |
 
@@ -263,6 +290,8 @@ Other entities: `TeamMember`, `FurnitureCategory`, `FurnitureItem` (see `lib/typ
 - Data is seeded from static JSON (`data.json`). **Projects** are the only entity with real persistence: creating, editing, or deleting a visit is mirrored to `localStorage` (`vrboost.projects.v1`) via the `useProjects` store, so it survives a reload. There is no real backend, so this is per-browser only and clearing storage resets to the seed.
 - Other actions (inviting a team member, scheduling a meeting, etc.) are still mock — they navigate or update local state without persisting.
 - The 3D viewer embeds a public Matterport demo tour for realism; it is not wired to each project's own scan (no real Matterport integration, per the brief).
-- Some filter and tab interactions are visual only; visit search is functional.
+- Project & staging search/filters are functional (search + status/type filter); a few remaining tab interactions elsewhere are still visual only.
+- The **Appearance** modal (logo, colors, font, theme, domain) is a visual mock — selections are not persisted or applied to the live theme.
+- The floating **chat widget** is a mock conversation with a canned auto-reply — no messaging backend.
 - "Share project" copies the page URL to the clipboard (no real share backend).
 - Collaborator avatars are mock data attached per project in `data.json`.
