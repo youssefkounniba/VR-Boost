@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Mail, Bell, ChevronDown, Menu } from "lucide-react";
 import { useState } from "react";
 import AppearanceModal from "@/components/ui/AppearanceModal";
+import ManagePlanModal from "@/components/ui/ManagePlanModal";
 
 interface HeaderProps {
   onMenuToggle?: () => void;
@@ -13,6 +14,7 @@ interface HeaderProps {
 export default function Header({ onMenuToggle }: HeaderProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showAppearance, setShowAppearance] = useState(false);
+  const [showSubscription, setShowSubscription] = useState(false);
   const router = useRouter();
 
   return (
@@ -63,10 +65,10 @@ export default function Header({ onMenuToggle }: HeaderProps) {
           className="flex items-center gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-field"
         >
           <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-ink text-sm font-bold text-white">
-            A
+            M
           </span>
           <span className="hidden text-left sm:block">
-            <span className="block text-sm font-bold leading-tight">Abdelali H.</span>
+            <span className="block text-sm font-bold leading-tight">Mehdi idouallouch</span>
             <span className="block text-xs text-muted">Admin</span>
           </span>
           <ChevronDown className="h-4 w-4 text-muted" strokeWidth={2} />
@@ -78,14 +80,14 @@ export default function Header({ onMenuToggle }: HeaderProps) {
               <p className="text-xs font-semibold text-muted">Account</p>
               <div className="mt-2 flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-ink text-sm font-bold text-white">
-                  A
+                  M
                 </span>
                 <div>
-                  <p className="text-sm font-bold">Abdelali Hraich</p>
-                  <p className="text-xs text-muted">Abduux.ta@gmail.com</p>
+                  <p className="text-sm font-bold">mehdi</p>
+                  <p className="text-xs text-muted">idouallouchmehdi@gmail.com</p>
                 </div>
               </div>
-              <button className="btn-black mt-3 w-full text-xs">
+              <button onClick={() => setShowSubscription(true)} className="btn-black mt-3 w-full text-xs">
                 Manage subscription
               </button>
             </div>
@@ -123,6 +125,9 @@ export default function Header({ onMenuToggle }: HeaderProps) {
 
       {showAppearance && (
         <AppearanceModal onClose={() => setShowAppearance(false)} />
+      )}
+      {showSubscription && (
+        <ManagePlanModal onClose={() => setShowSubscription(false)} />
       )}
     </header>
   );

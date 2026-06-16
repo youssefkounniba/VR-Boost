@@ -17,6 +17,20 @@ A mini-MVP for the vr boost agency virtual home-staging platform. Allows agents 
 
 ---
 
+## Why This Stack
+
+This is a front-end-only MVP, so the stack was chosen to **prove the experience fast** while leaving a clean path to a real backend later. The choices are deliberate, not defaults:
+
+- **Next.js 14 (App Router)** — one codebase serves both the marketing landing page and the authenticated platform. **Route groups** (`app/(platform)/`) let the in-app pages share a single shell (header + sidebar) while the landing page stays standalone, with no extra routing library. **Server Components by default** keep pages light (only interactive islands opt into `"use client"`), and it's the industry-standard React meta-framework — easy to staff and a direct upgrade path to API routes / server actions when a backend is added.
+- **TypeScript (strict)** — compile-time safety at no runtime cost. With no backend and no test suite, the strict type-checker via `npm run build` is the project's main safety net, and `lib/types.ts` is the single source of truth for the domain model.
+- **Tailwind CSS 3 + custom design tokens** — build a consistent, on-brand UI quickly without per-component CSS. Tokens and reusable component classes (see the Design System section) keep the look enforced rather than hand-rolled.
+- **lucide-react** — lightweight, tree-shakeable SVG icons that match the clean aesthetic, with no icon-font bloat.
+- **Static JSON + `localStorage` (no backend)** — the goal is validating the UX, not infrastructure. Seeding from `data.json` and mirroring projects to `localStorage` makes the demo feel real (visits persist across reloads) without standing up a database — and it's trivial to swap the store for a real API later.
+
+**Trade-offs / what production would add:** a real backend + database, authentication, automated tests, and persistence for the actions that are currently mocked (invites, scheduling, sharing). The stack was scoped intentionally for an MVP — see **Known Limitations**.
+
+---
+
 ## Getting Started
 
 ```bash

@@ -10,7 +10,6 @@ import {
   Trash2,
   Play,
   Share2,
-  MoreHorizontal,
   ArrowLeft,
   MapPin,
   SlidersHorizontal,
@@ -20,12 +19,7 @@ import {
   X,
 } from "lucide-react";
 import data from "@/lib/data/data.json";
-import type {
-  FurnitureItem,
-  FurnitureCategory,
-  Project,
-  VisitStatus,
-} from "@/lib/types";
+import type { Project, VisitStatus } from "@/lib/types";
 import { STATUS_LABELS } from "@/lib/types";
 
 const STATUSES: VisitStatus[] = [
@@ -43,11 +37,36 @@ const TYPES: Project["propertyType"][] = [
   "Office",
 ];
 
+/**
+ * Furniture catalog for the staging editor.
+ * `tile` is the designed thumbnail (gray card + color dots + ⋯) shown in the
+ * picker; `cutout` is the transparent PNG dropped into the room when placed.
+ * Cut-outs are generated from the tiles by `scripts/cutout.cjs`.
+ */
+type Piece = {
+  id: string;
+  name: string;
+  category: string;
+  tile: string;
+  cutout: string;
+};
+
+const FURNITURE: Piece[] = [
+  { id: "f15", name: "Eames Bar Stool", category: "Chairs", tile: "/images/Frame 15.png", cutout: "/images/furniture/frame-15.png" },
+  { id: "f16", name: "Highback Armchair", category: "Sofa", tile: "/images/Frame 16.png", cutout: "/images/furniture/frame-16.png" },
+  { id: "f9", name: "Wood Lounge Chair", category: "Chairs", tile: "/images/Frame 9.png", cutout: "/images/furniture/frame-9.png" },
+  { id: "f14", name: "Grey Tub Chair", category: "Chairs", tile: "/images/Frame 14.png", cutout: "/images/furniture/frame-14.png" },
+  { id: "f10", name: "Green Armchair", category: "Sofa", tile: "/images/Frame 10.png", cutout: "/images/furniture/frame-10.png" },
+  { id: "f17", name: "Mustard Armchair", category: "Sofa", tile: "/images/Frame 17.png", cutout: "/images/furniture/frame-17.png" },
+  { id: "f18", name: "Grey Tub Chair", category: "Chairs", tile: "/images/Frame 18.png", cutout: "/images/furniture/frame-18.png" },
+  { id: "f19", name: "Green Armchair", category: "Sofa", tile: "/images/Frame 19.png", cutout: "/images/furniture/frame-19.png" },
+];
+
+const CATEGORIES = Array.from(new Set(FURNITURE.map((f) => f.category)));
+
 // Two distinct empty rooms so v1 / v2 read as different scenes.
-const ROOM_V1 =
-  "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&q=80";
-const ROOM_V2 =
-  "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200&q=80";
+const ROOM_V1 = "/images/rooms/empty-1.jpg";
+const ROOM_V2 = "/images/rooms/empty-2.jpg";
 
 type View = "gallery" | "v1" | "v2";
 
@@ -64,15 +83,13 @@ const DEFAULT_TRANSFORM: Transform = {
 };
 
 export default function StagingPage() {
-  const items = data.items as FurnitureItem[];
-  const categories = data.categories as FurnitureCategory[];
   const projects = data.projects as Project[];
 
   const [view, setView] = useState<View>("gallery");
   const [search, setSearch] = useState("");
   const [gallerySearch, setGallerySearch] = useState("");
-  const [categoryId, setCategoryId] = useState<string>("all");
-  const [placed, setPlaced] = useState<FurnitureItem | null>(null);
+  const [category, setCategory] = useState<string>("all");
+  const [placed, setPlaced] = useState<Piece | null>(null);
   const [transform, setTransform] = useState<Transform>(DEFAULT_TRANSFORM);
 
   const [filterOpen, setFilterOpen] = useState(false);
@@ -90,10 +107,10 @@ export default function StagingPage() {
     return () => document.removeEventListener("click", onClick);
   }, []);
 
-  const filtered = items.filter(
-    (a) =>
-      (categoryId === "all" || a.categoryId === categoryId) &&
-      a.name.toLowerCase().includes(search.toLowerCase())
+  const filtered = FURNITURE.filter(
+    (f) =>
+      (category === "all" || f.category === category) &&
+      f.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const activeFilters = statusFilter.length + typeFilter.length;
@@ -125,7 +142,7 @@ export default function StagingPage() {
   });
 
   function openEditor() {
-    if (!placed) setPlaced(items[0]);
+    if (!placed) setPlaced(FURNITURE[0]);
     setView("v1");
   }
 
@@ -314,7 +331,7 @@ export default function StagingPage() {
               aria-label="Add furniture"
               className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white transition-colors hover:bg-blue-600"
             >
-              <Plus className="h-5 w-5" strokeWidth={2.5} />
+              <ArrowLeft className="h-4 w-4" />
             </button>
             <Divider />
             <ToolButton aria-label="Comments">
@@ -416,13 +433,13 @@ export default function StagingPage() {
               isV2 ? "bottom-24 left-1/2 -translate-x-1/2" : "bottom-32 right-24"
             }`}
           >
-            <div className="relative h-52 w-52">
+            <div className="relative h-56 w-56">
               <Image
-                src={placed.image}
+                src={placed.cutout}
                 alt={placed.name}
                 fill
                 className="object-contain drop-shadow-2xl"
-                sizes="208px"
+                sizes="224px"
               />
               <Gizmo />
             </div>
@@ -477,16 +494,16 @@ export default function StagingPage() {
             </label>
             <div className="relative">
               <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
                 className="appearance-none rounded-xl bg-white/10 py-2 pl-3 pr-9 text-sm font-semibold text-white focus:outline-none focus:ring-1 focus:ring-white/30"
               >
                 <option value="all" className="text-ink">
                   Select Category
                 </option>
-                {categories.map((c) => (
-                  <option key={c.id} value={c.id} className="text-ink">
-                    {c.name}
+                {CATEGORIES.map((c) => (
+                  <option key={c} value={c} className="text-ink">
+                    {c}
                   </option>
                 ))}
               </select>
@@ -496,45 +513,30 @@ export default function StagingPage() {
 
           <div className="flex gap-3 overflow-x-auto pb-1">
             {filtered.map((item) => (
-              <div
+              <button
                 key={item.id}
-                className={`group relative h-28 w-28 shrink-0 overflow-hidden rounded-xl border-2 transition-colors ${
+                type="button"
+                onClick={() => {
+                  setPlaced(item);
+                  setTransform(DEFAULT_TRANSFORM);
+                  setView("v2");
+                }}
+                aria-label={`Place ${item.name}`}
+                title={item.name}
+                className={`relative h-28 w-28 shrink-0 overflow-hidden rounded-xl border-2 bg-white transition-colors ${
                   placed?.id === item.id
                     ? "border-white"
-                    : "border-transparent hover:border-white/40"
+                    : "border-transparent hover:border-white/50"
                 }`}
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPlaced(item);
-                    setTransform(DEFAULT_TRANSFORM);
-                    setView("v2");
-                  }}
-                  className="absolute inset-0"
-                  aria-label={`Place ${item.name}`}
-                >
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    className="object-cover"
-                    sizes="112px"
-                  />
-                </button>
-                <div className="pointer-events-none absolute bottom-1 left-1 flex gap-0.5">
-                  {item.colors.map((c, i) => (
-                    <span
-                      key={i}
-                      className="h-3 w-3 rounded-full border border-white/50"
-                      style={{ backgroundColor: c }}
-                    />
-                  ))}
-                </div>
-                <span className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded bg-black/50 text-white/70">
-                  <MoreHorizontal className="h-3 w-3" />
-                </span>
-              </div>
+                <Image
+                  src={item.tile}
+                  alt={item.name}
+                  fill
+                  className="object-cover"
+                  sizes="112px"
+                />
+              </button>
             ))}
 
             {filtered.length === 0 && (

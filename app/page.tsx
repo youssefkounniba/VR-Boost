@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -17,6 +16,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/landing/Navbar";
 import StoryScroll from "@/components/landing/StoryScroll";
+import HeroRoom from "@/components/landing/HeroRoom";
 
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
@@ -40,7 +40,6 @@ function Angular({ className = "" }: { className?: string }) {
     >
       <span className="w-2.5 rounded-sm bg-landing-ctaBlue" />
       <span className="w-2.5 rounded-sm bg-landing-teal" />
-      <span className="w-2.5 rounded-sm bg-landing-lime" />
     </div>
   );
 }
@@ -90,30 +89,10 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Preview image */}
+          {/* Interactive 3D room */}
           <div className="relative">
             <Angular className="-left-4 -top-5 h-16 opacity-80" />
-            <div className="relative overflow-hidden rounded-3xl border border-landing-line bg-white p-2 shadow-2xl shadow-landing-ink/10">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-                <Image src="/images/story/02-stage.png" alt="Virtually staged interior" fill className="object-cover" sizes="(max-width:1024px) 100vw, 560px" priority />
-                {/* hotspots */}
-                {[
-                  { x: "22%", y: "30%" },
-                  { x: "52%", y: "66%" },
-                  { x: "78%", y: "55%" },
-                ].map((h, i) => (
-                  <span key={i} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: h.x, top: h.y }}>
-                    <span className="relative flex h-5 w-5 items-center justify-center">
-                      <span className="absolute inset-0 rounded-full bg-landing-ctaBlue/40" style={{ animation: "pulse-ring 2.2s ease-out infinite" }} />
-                      <span className="relative h-3 w-3 rounded-full border-2 border-white bg-landing-ctaBlue shadow" />
-                    </span>
-                  </span>
-                ))}
-              </div>
-              <span className="absolute left-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-landing-ctaBlue px-3 py-1 text-xs font-bold text-white shadow">
-                <Wand2 className="h-3 w-3" /> Home Staging
-              </span>
-            </div>
+            <HeroRoom />
             <Angular className="-bottom-5 -right-3 h-16 opacity-80" />
           </div>
         </div>
@@ -122,9 +101,11 @@ export default function HomePage() {
       {/* ===== Stats strip ===== */}
       <section className="border-y border-landing-line bg-landing-paper">
         <div className="mx-auto flex max-w-[1200px] flex-wrap items-center gap-x-10 gap-y-5 px-6 py-7">
-          <p className="flex items-baseline gap-2">
-            <span className="font-display text-4xl font-black text-landing-ctaBlue">78%</span>
-            <span className="max-w-[210px] text-sm leading-snug text-landing-body">more likely to purchase when virtually staged</span>
+          <p className="max-w-[320px] text-sm leading-snug text-landing-body">
+            <span className="font-semibold text-landing-ink">
+              Homes sell faster when buyers can picture themselves living there.
+            </span>{" "}
+            Virtual staging makes that possible in minutes.
           </p>
           <span className="hidden h-9 w-px bg-landing-line sm:block" />
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-landing-dim">Trusted by leading brands</p>
