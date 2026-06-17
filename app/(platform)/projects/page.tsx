@@ -107,6 +107,25 @@ export default function ProjectsPage() {
     setTypeFilter([]);
   }
 
+  // Anchor a fixed-position menu to the toggle button so it isn't clipped by
+  // the table's scroll container. Shared by the desktop table and mobile cards.
+  function openMenu(e: React.MouseEvent<HTMLButtonElement>, id: string) {
+    if (menuOpen === id) {
+      setMenuOpen(null);
+      return;
+    }
+    const r = e.currentTarget.getBoundingClientRect();
+    const menuH = 96;
+    const top =
+      r.bottom + 4 + menuH > window.innerHeight
+        ? r.top - menuH - 4
+        : r.bottom + 4;
+    setMenuPos({ top, left: Math.max(8, r.right - 160) });
+    setMenuOpen(id);
+  }
+
+  const menuProject = filtered.find((p) => p.id === menuOpen) ?? null;
+
   return (
     <div>
       {/* Toolbar */}
@@ -235,8 +254,8 @@ export default function ProjectsPage() {
         </div>
       )}
 
-      {/* Table */}
-      <div className="card mt-5 overflow-hidden">
+      {/* Table (desktop) */}
+      <div className="card mt-5 hidden overflow-hidden md:block">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] text-sm">
             <thead>
@@ -330,68 +349,11 @@ export default function ProjectsPage() {
                   <button
                     type="button"
                     data-action-toggle
-                    onClick={(e) => {
-                      if (menuOpen === p.id) {
-                        setMenuOpen(null);
-                        return;
-                      }
-                      // Anchor a fixed-position menu to the button so it isn't
-                      // clipped by the table's scroll container.
-                      const r = e.currentTarget.getBoundingClientRect();
-                      const menuH = 96;
-                      const top =
-                        r.bottom + 4 + menuH > window.innerHeight
-                          ? r.top - menuH - 4
-                          : r.bottom + 4;
-                      setMenuPos({ top, left: Math.max(8, r.right - 160) });
-                      setMenuOpen(p.id);
-                    }}
+                    onClick={(e) => openMenu(e, p.id)}
                     className="flex h-8 w-8 items-center justify-center rounded-lg text-muted transition-colors hover:bg-field"
                   >
                     <MoreHorizontal className="h-4 w-4" />
                   </button>
-                  {menuOpen === p.id && menuPos && (
-                    <div
-                      data-action-menu
-                      style={{
-                        position: "fixed",
-                        top: menuPos.top,
-                        left: menuPos.left,
-                      }}
-                      className="z-50 w-40 rounded-xl bg-white py-1 shadow-panel"
-                    >
-                      <button
-                        onClick={() => {
-                          setEditProject(p);
-                          setMenuOpen(null);
-                        }}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-sm text-ink hover:bg-field"
-                      >
-                        <Pencil className="h-3.5 w-3.5" />
-                        Edit details
-                      </button>
-                      <button
-                        onClick={() => {
-                          updateProject(p.id, { archived: true });
-                          setMenuOpen(null);
-                        }}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-sm text-ink hover:bg-field"
-                      >
-                        <Archive className="h-3.5 w-3.5" />
-                        Archive
-                      </button>
-                      <button
-                        onClick={() => {
-                          setPendingDelete(p);
-                          setMenuOpen(null);
-                        }}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        Delete
-                      </button>
-                    </div>
-                  )}
                 </td>
               </tr>
             ))}
@@ -414,6 +376,136 @@ export default function ProjectsPage() {
         </table>
         </div>
       </div>
+
+      {/* Cards (mobile) */}
+      <div className="mt-5 space-y-3 md:hidden">
+        {filtered.map((p) => (
+          <div key={p.id} className="card p-3">
+            <div className="flex gap-3">
+              <Link
+                href={`/projects/${p.id}`}
+                className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl"
+              >
+                <Image
+                  src={p.image}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="80px"
+                />
+                <span className="absolute inset-0 flex items-center justify-center">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/80">
+                    <svg
+                      className="h-3 w-3 text-ink"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                    >
+                      <path d="M6 3l7 5-7 5V3z" />
+                    </svg>
+                  </span>
+                </span>
+              </Link>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-start justify-between gap-2">
+                  <Link href={`/projects/${p.id}`} className="min-w-0">
+                    <p className="truncate font-bold text-ink">
+                      {p.client}, {p.propertyType}
+                    </p>
+                    <p className="mt-0.5 flex items-center gap-1 text-xs text-muted">
+                      <MapPin className="h-3 w-3 shrink-0" />
+                      <span className="truncate">{p.address}</span>
+                    </p>
+                    <p className="mt-0.5 text-[11px] font-semibold text-faint">
+                      {p.id}
+                    </p>
+                  </Link>
+                  <button
+                    type="button"
+                    data-action-toggle
+                    onClick={(e) => openMenu(e, p.id)}
+                    className="-mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-field"
+                  >
+                    <MoreHorizontal className="h-4 w-4" />
+                  </button>
+                </div>
+
+                <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${STATUS_COLORS[p.status]}`}
+                  >
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[p.status]}`}
+                    />
+                    {STATUS_LABELS[p.status]}
+                  </span>
+                  <div className="flex -space-x-2">
+                    {(p.assignees ?? []).map((av, i) => (
+                      <span
+                        key={i}
+                        className={`flex h-7 w-7 items-center justify-center rounded-full border-2 border-white text-[11px] font-bold text-white ${av.color}`}
+                      >
+                        {av.initial}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {filtered.length === 0 && (
+          <div className="card p-10 text-center">
+            <p className="text-sm font-semibold text-ink">No visits found</p>
+            <p className="mt-1 text-xs text-muted">
+              {projects.length === 0
+                ? "Create your first virtual visit to get started."
+                : "Try adjusting your search or filters."}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Row action menu (shared by table + cards) */}
+      {menuOpen && menuPos && menuProject && (
+        <div
+          data-action-menu
+          style={{ position: "fixed", top: menuPos.top, left: menuPos.left }}
+          className="z-50 w-40 rounded-xl bg-white py-1 shadow-panel"
+        >
+          <button
+            onClick={() => {
+              setEditProject(menuProject);
+              setMenuOpen(null);
+            }}
+            className="flex w-full items-center gap-2 px-4 py-2 text-sm text-ink hover:bg-field"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+            Edit details
+          </button>
+          <button
+            onClick={() => {
+              updateProject(menuProject.id, { archived: true });
+              setMenuOpen(null);
+            }}
+            className="flex w-full items-center gap-2 px-4 py-2 text-sm text-ink hover:bg-field"
+          >
+            <Archive className="h-3.5 w-3.5" />
+            Archive
+          </button>
+          <button
+            onClick={() => {
+              setPendingDelete(menuProject);
+              setMenuOpen(null);
+            }}
+            className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+            Delete
+          </button>
+        </div>
+      )}
 
       {/* Delete confirmation */}
       <ConfirmDialog

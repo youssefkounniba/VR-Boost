@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -28,13 +29,15 @@ export default function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-4">
-        <Link href="/" className="leading-none">
-          <span className="font-display text-xl tracking-tight text-landing-ink">
-            VR<span className="font-normal">boost</span>
-          </span>
-          <span className="block text-[8px] font-bold uppercase tracking-[0.4em] text-landing-ctaBlue">
-            Agency
-          </span>
+        <Link href="/" className="flex items-center leading-none">
+          <Image
+            src="/images/logo-white.svg"
+            alt="VR Boost Agency"
+            width={175}
+            height={33}
+            className="h-7 w-auto sm:h-8"
+            priority
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm font-medium text-landing-body md:flex">

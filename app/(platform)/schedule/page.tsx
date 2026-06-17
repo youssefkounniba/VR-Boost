@@ -82,12 +82,12 @@ export default function SchedulePage() {
     <div>
       {/* Tabs + Availability */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex gap-1 rounded-xl bg-white p-1 text-sm font-semibold shadow-card">
+        <div className="flex max-w-full gap-1 overflow-x-auto rounded-xl bg-white p-1 text-sm font-semibold shadow-card">
           {TABS.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`rounded-lg px-4 py-1.5 transition-colors ${
+              className={`shrink-0 rounded-lg px-3 py-1.5 transition-colors sm:px-4 ${
                 tab === t.key
                   ? "bg-field text-ink shadow-sm"
                   : "text-muted hover:text-ink"
@@ -136,7 +136,7 @@ export default function SchedulePage() {
       {showAvailability && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-lg rounded-2xl bg-white shadow-panel">
-            <div className="flex items-center gap-3 rounded-t-2xl bg-ink px-6 py-4">
+            <div className="flex items-center gap-3 rounded-t-2xl bg-ink px-4 py-4 sm:px-6">
               <Clock className="h-5 w-5 text-white" />
               <h2 className="text-base font-bold text-white">
                 Adjust working hours
@@ -149,13 +149,16 @@ export default function SchedulePage() {
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="space-y-4 p-4 sm:p-6">
               {availability.map((item, i) => (
-                <div key={item.day} className="flex items-center gap-4">
+                <div
+                  key={item.day}
+                  className="flex flex-wrap items-center gap-x-4 gap-y-2"
+                >
                   <button
                     type="button"
                     onClick={() => toggleDay(i)}
-                    className={`relative h-6 w-11 rounded-full transition-colors ${
+                    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
                       item.enabled ? "bg-ink" : "bg-gray-200"
                     }`}
                   >
@@ -165,11 +168,11 @@ export default function SchedulePage() {
                       }`}
                     />
                   </button>
-                  <span className="w-24 text-sm font-semibold text-ink">
+                  <span className="w-20 text-sm font-semibold text-ink sm:w-24">
                     {item.day}
                   </span>
                   {item.enabled ? (
-                    <div className="flex flex-1 items-center gap-2">
+                    <div className="flex w-full items-center gap-2 sm:w-auto sm:flex-1">
                       <span className="flex-1 rounded-xl border border-gray-200 px-3 py-1.5 text-center text-sm">
                         from {item.from}
                       </span>
@@ -179,14 +182,14 @@ export default function SchedulePage() {
                       </span>
                     </div>
                   ) : (
-                    <span className="flex-1 rounded-xl bg-field px-3 py-1.5 text-center text-sm text-faint">
+                    <span className="w-full rounded-xl bg-field px-3 py-1.5 text-center text-sm text-faint sm:w-auto sm:flex-1">
                       Not available
                     </span>
                   )}
                 </div>
               ))}
             </div>
-            <div className="px-6 pb-6">
+            <div className="px-4 pb-4 sm:px-6 sm:pb-6">
               <button
                 type="button"
                 onClick={() => setShowAvailability(false)}
@@ -208,19 +211,21 @@ function MeetingCard({ meeting }: { meeting: Meeting }) {
   const day = d.getDate();
 
   return (
-    <div className="card flex flex-wrap items-center gap-4 p-4">
+    <div className="card flex flex-wrap items-center gap-3 p-4 sm:gap-4">
       {/* Date */}
-      <div className="flex w-16 shrink-0 flex-col items-center">
+      <div className="flex w-14 shrink-0 flex-col items-center sm:w-16">
         <p className="text-xs font-semibold uppercase text-muted">{month}</p>
-        <p className="text-3xl font-extrabold leading-none text-ink">{day}</p>
-        <p className="mt-1 text-xs text-muted">
+        <p className="text-2xl font-extrabold leading-none text-ink sm:text-3xl">
+          {day}
+        </p>
+        <p className="mt-1 text-[11px] text-muted sm:text-xs">
           {meeting.startTime} - {meeting.endTime}
         </p>
       </div>
 
-      {/* Thumbnail */}
+      {/* Thumbnail (hidden on the smallest screens to give the info room) */}
       {meeting.image && (
-        <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
+        <div className="relative hidden h-16 w-20 shrink-0 overflow-hidden rounded-xl sm:block">
           <Image
             src={meeting.image}
             alt=""
@@ -240,24 +245,24 @@ function MeetingCard({ meeting }: { meeting: Meeting }) {
 
       {/* Property info */}
       <div className="min-w-0 flex-1">
-        <p className="font-bold text-ink">
+        <p className="truncate font-bold text-ink">
           {meeting.guest.name}, {meeting.propertyType}
         </p>
         {meeting.address && (
           <p className="mt-0.5 flex items-center gap-1 text-xs text-muted">
             <MapPin className="h-3 w-3 shrink-0" />
-            {meeting.address}
+            <span className="truncate">{meeting.address}</span>
           </p>
         )}
         {meeting.rooms && (
-          <p className="mt-0.5 text-xs text-faint">
+          <p className="mt-0.5 truncate text-xs text-faint">
             {meeting.rooms.join(", ")}
           </p>
         )}
       </div>
 
       {/* Guest */}
-      <div className="hidden shrink-0 items-center gap-3 sm:flex">
+      <div className="hidden shrink-0 items-center gap-3 lg:flex">
         <span
           className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white ${meeting.guest.color}`}
         >
@@ -272,20 +277,23 @@ function MeetingCard({ meeting }: { meeting: Meeting }) {
       </div>
 
       {/* Actions */}
-      <div className="flex shrink-0 flex-wrap gap-2">
+      <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:shrink-0">
         <button
           type="button"
-          className="rounded-xl border border-red-200 px-4 py-2 text-xs font-semibold text-red-500 transition-colors hover:bg-red-50"
+          className="w-full rounded-xl border border-red-200 px-4 py-2 text-xs font-semibold text-red-500 transition-colors hover:bg-red-50 sm:w-auto"
         >
           Cancel
         </button>
         <button
           type="button"
-          className="rounded-xl border border-gray-200 px-4 py-2 text-xs font-semibold text-ink transition-colors hover:bg-field"
+          className="w-full rounded-xl border border-gray-200 px-4 py-2 text-xs font-semibold text-ink transition-colors hover:bg-field sm:w-auto"
         >
           Reschedule
         </button>
-        <button type="button" className="btn-black text-xs">
+        <button
+          type="button"
+          className="btn-black col-span-2 w-full text-xs sm:col-span-1 sm:w-auto"
+        >
           Join meeting
         </button>
       </div>

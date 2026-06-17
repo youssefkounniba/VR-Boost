@@ -123,8 +123,8 @@ export default function ProjectDetailPage({
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-extrabold">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <h1 className="text-xl font-extrabold sm:text-2xl">
               {project.client}, {project.propertyType}
             </h1>
             <StatusBadge status={project.status} />
@@ -132,8 +132,12 @@ export default function ProjectDetailPage({
           <p className="mt-1 text-sm text-muted">{project.address}</p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={handleShare} className="btn-white">
+        <div className="grid w-full grid-cols-2 gap-3 sm:flex sm:w-auto sm:flex-wrap">
+          <button
+            type="button"
+            onClick={handleShare}
+            className="btn-white col-span-2 w-full sm:w-auto"
+          >
             {copied ? (
               <Check className="h-4 w-4 text-green-600" />
             ) : (
@@ -144,7 +148,7 @@ export default function ProjectDetailPage({
           <button
             type="button"
             onClick={() => setEditOpen(true)}
-            className="btn-white"
+            className="btn-white w-full sm:w-auto"
           >
             <Pencil className="h-4 w-4" />
             Edit
@@ -152,12 +156,12 @@ export default function ProjectDetailPage({
           <button
             type="button"
             onClick={() => setConfirmOpen(true)}
-            className="btn-white text-red-500 hover:bg-red-50"
+            className="btn-white w-full text-red-500 hover:bg-red-50 sm:w-auto"
           >
             <Trash2 className="h-4 w-4" />
             Delete
           </button>
-          <Link href="/hub" className="btn-blue">
+          <Link href="/hub" className="btn-blue col-span-2 w-full sm:w-auto">
             <Video className="h-4 w-4" />
             Join Hub &amp; Avatar visit
           </Link>
