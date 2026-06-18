@@ -4,6 +4,16 @@ A mini-MVP for the vr boost agency virtual home-staging platform. Allows agents 
 
 ---
 
+## Live Demo
+
+- **Live site (Vercel):** https://vr-boost-agency.vercel.app/
+- **Video walkthrough (Loom):** [Watch the 2-min demo →](https://www.loom.com/share/6fdcf783eccd4bb7b553142b265e0558)
+- **Screenshots:** see [`docs/screenshots/`](docs/screenshots)
+
+[![Watch the demo on Loom](https://cdn.loom.com/sessions/thumbnails/6fdcf783eccd4bb7b553142b265e0558-with-play.gif)](https://www.loom.com/share/6fdcf783eccd4bb7b553142b265e0558)
+
+---
+
 ## Tech Stack
 
 | Layer | Choice |
