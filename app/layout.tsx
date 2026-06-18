@@ -14,10 +14,30 @@ const roboto = Roboto({
   variable: "--font-roboto",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+const title = "VR Boost Agency — Virtual Home Staging & Hub & Avatar";
+const description =
+  "Turn an empty property into an immersive experience: virtual home staging, 3D tours and remote guidance via Hub & Avatar.";
+
 export const metadata: Metadata = {
-  title: "VR Boost Agency — Virtual Home Staging & Hub & Avatar",
-  description:
-    "Turn an empty property into an immersive experience: virtual home staging, 3D tours and remote guidance via Hub & Avatar.",
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  applicationName: "VR Boost Agency",
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "VR Boost Agency",
+    title,
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { X, ArrowRight } from "lucide-react";
 
 const PLANS = [
@@ -59,25 +60,30 @@ interface ManagePlanModalProps {
 
 export default function ManagePlanModal({ onClose }: ManagePlanModalProps) {
   const [billing, setBilling] = useState<"yearly" | "monthly">("yearly");
+  // Render in a portal so the modal escapes the mobile drawer's transform
+  // (a `transform` ancestor becomes the containing block for `position: fixed`).
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  return (
+  const content = (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ backgroundColor: "rgba(0,0,0,0.45)" }}
     >
-      <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl bg-gray-100 p-8 shadow-2xl">
-        {/* Close */}
+      <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl bg-gray-100 shadow-2xl">
+        {/* Close — stays pinned while the body scrolls */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-white/80 text-ink hover:bg-white"
+          className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/80 text-ink hover:bg-white"
         >
           <X className="h-4 w-4" />
         </button>
 
+        <div className="max-h-[90vh] overflow-y-auto p-5 sm:p-8">
         {/* Header */}
         <div className="mb-6 text-center">
-          <h2 className="text-4xl font-extrabold text-ink">
+          <h2 className="text-2xl font-extrabold text-ink sm:text-4xl">
             Manage your plan
           </h2>
           <p className="mx-auto mt-2 max-w-xl text-sm text-muted">
@@ -193,7 +199,11 @@ export default function ManagePlanModal({ onClose }: ManagePlanModalProps) {
             </div>
           ))}
         </div>
+        </div>
       </div>
     </div>
   );
+
+  if (!mounted) return null;
+  return createPortal(content, document.body);
 }

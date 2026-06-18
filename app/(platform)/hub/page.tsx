@@ -78,7 +78,7 @@ export default function HubPage() {
       {/* Settings modal */}
       <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-panel">
         {/* Header */}
-        <div className="flex items-center gap-3 bg-ink px-6 py-4">
+        <div className="flex items-center gap-3 bg-ink px-4 py-4 sm:px-6">
           <Settings className="h-5 w-5 text-white" />
           <h2 className="text-base font-bold text-white">Meeting settings</h2>
           <button className="ml-auto flex h-8 w-8 items-center justify-center rounded-full text-white/70 hover:text-white">
@@ -88,7 +88,7 @@ export default function HubPage() {
 
         {step === "avatar" && (
           <>
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               <p className="mb-4 text-sm font-semibold text-ink">
                 Pick your Avatar
               </p>
@@ -120,7 +120,7 @@ export default function HubPage() {
                 ))}
               </div>
             </div>
-            <div className="flex justify-between px-6 pb-6">
+            <div className="flex justify-between px-4 pb-4 sm:px-6 sm:pb-6">
               <button
                 type="button"
                 className="btn-white"
@@ -141,7 +141,7 @@ export default function HubPage() {
 
         {step === "camera" && (
           <>
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               <div className="overflow-hidden rounded-xl bg-ink">
                 <div className="flex items-center gap-2 px-4 py-3">
                   <span className="flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
@@ -203,7 +203,7 @@ export default function HubPage() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-between px-6 pb-6">
+            <div className="flex justify-between px-4 pb-4 sm:px-6 sm:pb-6">
               <button
                 type="button"
                 onClick={() => setStep("avatar")}
@@ -240,15 +240,17 @@ function VirtualRoom() {
       />
 
       {/* Top HUD */}
-      <div className="relative z-10 mx-auto mt-4 flex items-center gap-3 rounded-2xl bg-ink/90 px-4 py-2.5 backdrop-blur-sm">
+      <div className="relative z-10 mx-auto mt-4 flex max-w-[calc(100%-1.5rem)] flex-wrap items-center justify-center gap-2 rounded-2xl bg-ink/90 px-3 py-2.5 backdrop-blur-sm sm:gap-3 sm:px-4">
         <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-white">
           <span className="text-sm font-bold">+</span>
         </button>
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-xs font-bold text-white">
           A
         </div>
-        <span className="text-sm font-semibold text-white">Abdelali Hraich</span>
-        <div className="mx-2 h-4 w-px bg-white/20" />
+        <span className="hidden text-sm font-semibold text-white sm:inline">
+          Abdelali Hraich
+        </span>
+        <div className="mx-2 hidden h-4 w-px bg-white/20 sm:block" />
         <div className="flex gap-1">
           {["A", "S", "R"].map((i, idx) => (
             <span

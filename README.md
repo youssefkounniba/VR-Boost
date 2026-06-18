@@ -57,6 +57,26 @@ npm run lint    # ESLint
 
 ---
 
+## Deployment (Vercel)
+
+The app is a standard Next.js 14 project with **no backend**, so it deploys to Vercel with zero config — Vercel auto-detects the framework, runs `next build`, and serves it.
+
+1. Push the repo to GitHub/GitLab/Bitbucket.
+2. In Vercel, **New Project → Import** the repo. Leave the defaults (Build: `next build`, Output: `.next`, Install: `npm install`).
+3. Add the environment variable below, then **Deploy**.
+
+### Environment variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Recommended | Public base URL of the deployment (e.g. `https://vr-boost-agency.vercel.app`). Used to resolve canonical / Open Graph URLs. Falls back to `http://localhost:3000` if unset. |
+
+See `.env.example`. Remote images are served from `images.unsplash.com` (whitelisted in `next.config.mjs`); the 3D tour is an embedded Matterport iframe. No other services or secrets are required.
+
+> **Note:** there is no database. Project create/edit/delete persist only to the visitor's `localStorage` (per-browser) — see **Known Limitations**.
+
+---
+
 ## Project Structure
 
 ```

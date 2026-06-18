@@ -59,10 +59,10 @@ export default function DashboardPage() {
           <Link
             key={p.id}
             href={`/projects/${p.id}`}
-            className="card flex items-center gap-4 p-3 transition-shadow hover:shadow-panel"
+            className="card flex items-center gap-3 p-3 transition-shadow hover:shadow-panel sm:gap-4"
           >
             {/* Thumbnail */}
-            <div className="relative h-[70px] w-[88px] shrink-0 overflow-hidden rounded-xl">
+            <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl sm:h-[70px] sm:w-[88px]">
               <Image
                 src={p.image}
                 alt=""
@@ -82,17 +82,23 @@ export default function DashboardPage() {
               <p className="truncate font-extrabold">
                 {p.client}, {p.propertyType}
               </p>
-              <p className="mt-0.5 flex items-center gap-1 truncate text-sm text-muted">
+              <p className="mt-0.5 flex items-center gap-1 text-sm text-muted">
                 <MapPin className="h-3.5 w-3.5 shrink-0" />
-                {p.address}
+                <span className="truncate">{p.address}</span>
               </p>
-              <p className="mt-0.5 text-xs text-faint">
+              <p className="mt-0.5 truncate text-xs text-faint">
                 {p.rooms.join(", ")}
               </p>
+              {/* Status badge — shown inline under the info on mobile */}
+              <div className="mt-2 sm:hidden">
+                <StatusBadge status={p.status} />
+              </div>
             </div>
 
-            {/* Status badge */}
-            <StatusBadge status={p.status} />
+            {/* Status badge (desktop) */}
+            <div className="hidden sm:block">
+              <StatusBadge status={p.status} />
+            </div>
 
             {/* Assignees */}
             <div className="hidden shrink-0 -space-x-2 sm:flex">
@@ -106,7 +112,7 @@ export default function DashboardPage() {
               ))}
             </div>
 
-            <MoreHorizontal className="h-5 w-5 shrink-0 text-faint" />
+            <MoreHorizontal className="hidden h-5 w-5 shrink-0 text-faint sm:block" />
           </Link>
         ))}
       </div>

@@ -13,7 +13,6 @@ import {
   ArrowLeft,
   MapPin,
   SlidersHorizontal,
-  Plus,
   MessageCircle,
   Hand,
   X,
@@ -52,14 +51,14 @@ type Piece = {
 };
 
 const FURNITURE: Piece[] = [
-  { id: "f15", name: "Eames Bar Stool", category: "Chairs", tile: "/images/Frame 15.png", cutout: "/images/furniture/frame-15.png" },
-  { id: "f16", name: "Highback Armchair", category: "Sofa", tile: "/images/Frame 16.png", cutout: "/images/furniture/frame-16.png" },
-  { id: "f9", name: "Wood Lounge Chair", category: "Chairs", tile: "/images/Frame 9.png", cutout: "/images/furniture/frame-9.png" },
-  { id: "f14", name: "Grey Tub Chair", category: "Chairs", tile: "/images/Frame 14.png", cutout: "/images/furniture/frame-14.png" },
-  { id: "f10", name: "Green Armchair", category: "Sofa", tile: "/images/Frame 10.png", cutout: "/images/furniture/frame-10.png" },
-  { id: "f17", name: "Mustard Armchair", category: "Sofa", tile: "/images/Frame 17.png", cutout: "/images/furniture/frame-17.png" },
-  { id: "f18", name: "Grey Tub Chair", category: "Chairs", tile: "/images/Frame 18.png", cutout: "/images/furniture/frame-18.png" },
-  { id: "f19", name: "Green Armchair", category: "Sofa", tile: "/images/Frame 19.png", cutout: "/images/furniture/frame-19.png" },
+  { id: "f15", name: "Eames Bar Stool", category: "Chairs", tile: "/images/furniture/frame-15.png", cutout: "/images/furniture/frame-15.png" },
+  { id: "f16", name: "Highback Armchair", category: "Sofa", tile: "/images/furniture/frame-16.png", cutout: "/images/furniture/frame-16.png" },
+  { id: "f9", name: "Wood Lounge Chair", category: "Chairs", tile: "/images/furniture/frame-9.png", cutout: "/images/furniture/frame-9.png" },
+  { id: "f14", name: "Grey Tub Chair", category: "Chairs", tile: "/images/furniture/frame-14.png", cutout: "/images/furniture/frame-14.png" },
+  { id: "f10", name: "Green Armchair", category: "Sofa", tile: "/images/furniture/frame-10.png", cutout: "/images/furniture/frame-10.png" },
+  { id: "f17", name: "Mustard Armchair", category: "Sofa", tile: "/images/furniture/frame-17.png", cutout: "/images/furniture/frame-17.png" },
+  { id: "f18", name: "Grey Tub Chair", category: "Chairs", tile: "/images/furniture/frame-18.png", cutout: "/images/furniture/frame-18.png" },
+  { id: "f19", name: "Green Armchair", category: "Sofa", tile: "/images/furniture/frame-19.png", cutout: "/images/furniture/frame-19.png" },
 ];
 
 const CATEGORIES = Array.from(new Set(FURNITURE.map((f) => f.category)));
@@ -322,7 +321,7 @@ export default function StagingPage() {
   return (
     <div className="flex h-full min-h-[560px] flex-col overflow-hidden rounded-2xl bg-ink">
       {/* Top toolbar */}
-      <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-white/10 px-3 py-3 sm:px-4">
         {isV2 ? (
           <>
             <button
@@ -372,11 +371,13 @@ export default function StagingPage() {
 
         <Divider />
 
-        <span className="text-sm font-semibold text-white/80">100%</span>
+        <span className="hidden text-sm font-semibold text-white/80 sm:inline">
+          100%
+        </span>
 
         <Divider />
 
-        <div className="flex gap-1.5">
+        <div className="hidden gap-1.5 sm:flex">
           {["bg-gray-600", "bg-gray-400", "bg-white"].map((c, i) => (
             <button
               key={i}
@@ -430,10 +431,12 @@ export default function StagingPage() {
         {placed && (
           <div
             className={`absolute ${
-              isV2 ? "bottom-24 left-1/2 -translate-x-1/2" : "bottom-32 right-24"
+              isV2
+                ? "left-1/2 top-6 -translate-x-1/2 sm:top-auto sm:bottom-24"
+                : "bottom-28 left-1/2 -translate-x-1/2 sm:bottom-32 sm:left-auto sm:right-24 sm:translate-x-0"
             }`}
           >
-            <div className="relative h-56 w-56">
+            <div className="relative h-40 w-40 sm:h-56 sm:w-56">
               <Image
                 src={placed.cutout}
                 alt={placed.name}
@@ -448,7 +451,7 @@ export default function StagingPage() {
 
         {/* v2 — transform panel */}
         {isV2 && (
-          <div className="absolute right-5 top-5 w-72 rounded-2xl bg-white/95 p-5 shadow-panel backdrop-blur">
+          <div className="absolute inset-x-3 bottom-3 max-h-[55%] overflow-y-auto rounded-2xl bg-white/95 p-5 shadow-panel backdrop-blur sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-5 sm:max-h-none sm:w-72">
             <h3 className="text-base font-bold text-ink">Transform:</h3>
             <p className="mt-1 text-xs text-muted">
               Adjust the position, rotation, and scale of the object.
@@ -523,7 +526,7 @@ export default function StagingPage() {
                 }}
                 aria-label={`Place ${item.name}`}
                 title={item.name}
-                className={`relative h-28 w-28 shrink-0 overflow-hidden rounded-xl border-2 bg-white transition-colors ${
+                className={`relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border-2 bg-white transition-colors sm:h-28 sm:w-28 ${
                   placed?.id === item.id
                     ? "border-white"
                     : "border-transparent hover:border-white/50"
@@ -564,7 +567,7 @@ function replace(
 }
 
 function Divider() {
-  return <div className="mx-2 h-6 w-px bg-white/10" />;
+  return <div className="mx-2 hidden h-6 w-px bg-white/10 sm:block" />;
 }
 
 function ToolButton({

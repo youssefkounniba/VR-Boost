@@ -62,7 +62,7 @@ export default function HomePage() {
         />
         <Angular className="left-[-10px] top-40 h-24 opacity-70" />
 
-        <div className="relative mx-auto grid max-w-[1200px] items-center gap-12 px-6 pb-20 pt-36 lg:grid-cols-[1.05fr_1fr] lg:pb-28 lg:pt-44">
+        <div className="relative mx-auto grid max-w-[1200px] items-center gap-10 px-6 pb-16 pt-28 sm:pt-36 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:pb-28 lg:pt-44">
           {/* Copy */}
           <div>
             <Eyebrow>Virtual Home Staging &amp; Hub &amp; Avatar</Eyebrow>
@@ -74,12 +74,12 @@ export default function HomePage() {
               remotely through a 3D avatar advisor, and close faster — without moving a
               single piece of furniture.
             </p>
-            <div className="mt-9 flex flex-wrap gap-4">
-              <Link href="/dashboard" className="inline-flex items-center gap-2 rounded-full bg-landing-ctaBlue px-7 py-3.5 text-sm font-bold text-white shadow-md shadow-landing-ctaBlue/25 transition-colors hover:bg-landing-ctaHover">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+              <Link href="/dashboard" className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-landing-ctaBlue px-7 py-3.5 text-sm font-bold text-white shadow-md shadow-landing-ctaBlue/25 transition-colors hover:bg-landing-ctaHover sm:w-auto">
                 Open the platform
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <a href="#story" className="inline-flex items-center gap-2 rounded-full border border-landing-line bg-white px-7 py-3.5 text-sm font-bold text-landing-ink transition-colors hover:border-landing-lineHov">
+              <a href="#story" className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-landing-line bg-white px-7 py-3.5 text-sm font-bold text-landing-ink transition-colors hover:border-landing-lineHov sm:w-auto">
                 <Play className="h-4 w-4 fill-current text-landing-ctaBlue" />
                 Watch a live walkthrough
               </a>
