@@ -1,3 +1,9 @@
+<img width="1440" height="808" alt="First page" src="https://github.com/user-attachments/assets/7fd34807-5b09-4d53-8f34-bfe63eace0b7" />
+<img width="1440" height="808" alt="second page" src="https://github.com/user-attachments/assets/10a2695b-a9a1-4f08-8e38-752644041a96" />
+<img width="1440" height="808" alt="third page" src="https://github.com/user-attachments/assets/7dde21d6-7db2-4b81-b497-64b70e557e9c" />
+
+
+
 # Roche Bobois - Virtual Visits SaaS Platform
 
 A highly optimized, glassmorphic SaaS platform MVP tailored for managing 3D virtual visits, staging projects, and virtual meetings. Built with a focus on premium aesthetics and interactive 3D visualizations.
