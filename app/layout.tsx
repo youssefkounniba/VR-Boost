@@ -1,51 +1,47 @@
-import type { Metadata } from "next";
-import { Lato, Roboto } from "next/font/google";
 import "./globals.css";
-
-const lato = Lato({
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
-  variable: "--font-lato",
-});
-
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-roboto",
-});
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-
-const title = "VR Boost Agency — Virtual Home Staging & Hub & Avatar";
-const description =
-  "Turn an empty property into an immersive experience: virtual home staging, 3D tours and remote guidance via Hub & Avatar.";
+import { Metadata } from "next";
+import { Bell, Mail } from "lucide-react";
+import Sidebar from "./Sidebar";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title,
-  description,
-  applicationName: "VR Boost Agency",
-  openGraph: {
-    type: "website",
-    url: siteUrl,
-    siteName: "VR Boost Agency",
-    title,
-    description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-  },
-  robots: { index: true, follow: true },
+  title: "Roche Bobois - Dashboard",
+  description: "Virtual Home Staging Dashboard",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${lato.variable} ${roboto.variable}`}>
-      <body>{children}</body>
+    <html lang="en">
+      <body>
+        <div className="layout-container">
+          {/* Header */}
+          <header className="top-header">
+            <div className="logo">
+              rochebobois
+              <span>PARIS</span>
+            </div>
+            <div className="header-actions">
+              <button className="icon-btn">
+                <Mail size={20} />
+              </button>
+              <button className="icon-btn">
+                <Bell size={20} />
+                <span className="badge">1</span>
+              </button>
+            </div>
+          </header>
+
+          {/* Main Layout Wrapper */}
+          <div className="main-wrapper">
+            {/* Sidebar (Client Component) */}
+            <Sidebar />
+
+            {/* Page Content */}
+            <main className="page-content">
+              {children}
+            </main>
+          </div>
+        </div>
+      </body>
     </html>
   );
 }
